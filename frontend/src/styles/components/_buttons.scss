@@ -1,0 +1,149 @@
+// Botones - CRM Elite
+@use '../core/variables' as *;
+@use '../core/mixins' as *;
+@use 'sass:color';
+
+// === BOTONES === //
+.btn-base {
+  padding: 0.8rem 1.5rem;
+  border-radius: $border-radius-md;
+  border: none;
+  cursor: pointer;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  transition: $transition-fast;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  min-width: 140px;
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.btn-primary {
+  @extend .btn-base;
+  @include gradient-background($primary-color, $primary-light);
+  color: $white;
+  box-shadow: 0 2px 4px rgba($primary-color, 0.2);
+  @include hover-lift;
+  
+  &:hover:not(:disabled) {
+    @include gradient-background($primary-dark, $primary-color);
+    box-shadow: 0 4px 8px rgba($primary-color, 0.3);
+  }
+}
+
+.btn-secondary {
+  @extend .btn-base;
+  @include gradient-background($secondary-color, $secondary-light);
+  color: $white;
+  box-shadow: 0 2px 4px rgba($secondary-color, 0.2);
+  @include hover-lift;
+  
+  &:hover:not(:disabled) {
+    @include gradient-background($secondary-dark, $secondary-color);
+    box-shadow: 0 4px 8px rgba($secondary-color, 0.3);
+  }
+}
+
+.btn-outline {
+  @extend .btn-base;
+  background: $gray-50;
+  color: $text-secondary;
+  border: 1px solid $gray-200;
+  box-shadow: $shadow-sm;
+  @include hover-lift;
+  
+  &:hover:not(:disabled) {
+    background: $gray-100;
+    color: $text-primary;
+    box-shadow: $shadow-md;
+  }
+}
+
+.btn-danger {
+  @extend .btn-base;
+  background: $gray-50;
+  color: $danger-color;
+  border: 1px solid $gray-200;
+  box-shadow: $shadow-sm;
+  @include hover-lift;
+  
+  &:hover:not(:disabled) {
+    background: $gray-100;
+    color: $danger-dark;
+    box-shadow: $shadow-md;
+  }
+}
+
+.btn-logout {
+  @extend .btn-base;
+  background: $danger-color;
+  color: $white;
+  border: none;
+  font-weight: $font-weight-semibold;
+  box-shadow: $shadow-md;
+  transition: all 0.3s ease;
+  
+  &:hover:not(:disabled) {
+    background: $danger-dark;
+    transform: translateY(-2px);
+    box-shadow: $shadow-lg;
+  }
+}
+
+.btn-add {
+  @extend .btn-base;
+  background: $accent-color;
+  color: $white;
+  border: none;
+  font-weight: $font-weight-medium;
+  box-shadow: $shadow-md;
+  transition: all 0.3s ease;
+  
+  &:hover:not(:disabled) {
+    background: color.adjust($accent-color, $lightness: -10%);
+    transform: translateY(-2px);
+    box-shadow: $shadow-lg;
+  }
+}
+
+.btn-search {
+  @extend .btn-base;
+  background: $primary-color;
+  color: white;
+  border: 1px solid $primary-color;
+  
+  &:hover:not(:disabled) {
+    background: $primary-dark;
+    border-color: $primary-dark;
+    transform: translateY(-1px);
+  }
+}
+
+.btn-icon {
+  @extend .btn-base;
+  padding: $spacing-sm;
+  width: auto;
+  height: auto;
+  min-width: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-clear {
+  @extend .btn-base;
+  background: $gray-100;
+  color: $text-secondary;
+  border: 1px solid $border-color;
+  
+  &:hover:not(:disabled) {
+    background: $gray-200;
+    color: $text-primary;
+  }
+}

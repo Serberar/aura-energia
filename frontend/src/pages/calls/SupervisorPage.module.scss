@@ -1,0 +1,599 @@
+.page {
+  padding: 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-primary, #111);
+}
+
+.refresh {
+  font-size: 0.75rem;
+  color: var(--text-muted, #888);
+  display: block;
+  margin-top: 0.25rem;
+}
+
+.refreshBtn {
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--border, #d1d5db);
+  background: var(--surface, #fff);
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background 0.15s;
+
+  &:hover:not(:disabled) { background: var(--surface-hover, #f3f4f6); }
+  &:disabled { opacity: 0.5; cursor: default; }
+}
+
+.errorBanner {
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  color: #b91c1c;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+}
+
+/* ── Stats grid ─────────────────────────────────────────────── */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.statTile {
+  background: var(--surface, #fff);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--border, #e5e7eb);
+  border-radius: 12px;
+  padding: 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent, #3b82f6);
+  }
+}
+
+.statValue {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--accent, #3b82f6);
+  font-variant-numeric: tabular-nums;
+}
+
+.statLabel {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.statSub {
+  font-size: 0.7rem;
+  color: var(--text-muted, #9ca3af);
+  margin-top: 0.25rem;
+}
+
+/* ── Section ────────────────────────────────────────────────── */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-primary, #111);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  padding: 0 0.4rem;
+  background: var(--surface-raised, #f3f4f6);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-secondary, #6b7280);
+}
+
+.empty {
+  color: var(--text-muted, #9ca3af);
+  font-size: 0.875rem;
+  padding: 1.5rem;
+  text-align: center;
+  border-width: 1px;
+  border-style: dashed;
+  border-color: var(--border, #e5e7eb);
+  border-radius: 8px;
+}
+
+/* ── Active calls table ─────────────────────────────────────── */
+.tableWrap {
+  overflow-x: auto;
+  border-radius: 10px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--border, #e5e7eb);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+
+  th {
+    background: var(--surface-raised, #f9fafb);
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary, #6b7280);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--border, #e5e7eb);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border, #f3f4f6);
+    color: var(--text-primary, #111);
+    vertical-align: middle;
+  }
+
+  tr:last-child td { border-bottom: none; }
+}
+
+.agentCell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.agentId {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: var(--text-secondary, #6b7280);
+}
+
+.callStatus {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  background: var(--surface-raised, #f3f4f6);
+  color: var(--text-secondary, #6b7280);
+}
+
+.callStatus_answered    { background: #dcfce7; color: #16a34a; }
+.callStatus_ringing     { background: #fef9c3; color: #ca8a04; }
+.callStatus_initiated   { background: #dbeafe; color: #2563eb; }
+
+.duration {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* ── Monitor column ─────────────────────────────────────────── */
+.monitorCell {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  min-width: 160px;
+}
+
+.monitorBadge {
+  font-size: 0.75rem;
+  color: var(--text-secondary, #6b7280);
+  white-space: nowrap;
+}
+
+%monitorBtn {
+  padding: 0.3rem 0.65rem;
+  border-radius: 6px;
+  border: none;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+  &:disabled { opacity: 0.5; cursor: default; }
+}
+
+.listenBtn {
+  @extend %monitorBtn;
+  background: #dbeafe;
+  color: #1d4ed8;
+  &:hover:not(:disabled) { background: #bfdbfe; }
+}
+
+.whisperBtn {
+  @extend %monitorBtn;
+  background: #f3e8ff;
+  color: #7c3aed;
+  &:hover:not(:disabled) { background: #e9d5ff; }
+}
+
+.stopBtn {
+  @extend %monitorBtn;
+  background: #fee2e2;
+  color: #b91c1c;
+  &:hover:not(:disabled) { background: #fecaca; }
+}
+
+/* ── Agents grid ────────────────────────────────────────────── */
+.agentsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.agentCard {
+  background: var(--surface, #fff);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--border, #e5e7eb);
+  border-radius: 10px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.agentCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.statusDotLarge {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.agentName {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-primary, #111);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.agentStatusBadge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.activeCallInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  background: #f0fdf4;
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.phoneSmall {
+  font-weight: 600;
+  color: #15803d;
+}
+
+.durationSmall {
+  font-variant-numeric: tabular-nums;
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.noCall {
+  font-size: 0.75rem;
+  color: var(--text-muted, #9ca3af);
+  text-align: center;
+  padding: 0.25rem 0;
+}
+
+/* ── Header meta (last refresh + WS indicator) ─────────────── */
+.headerMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.wsIndicator {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+}
+
+.wsOn  { background: #dcfce7; color: #15803d; }
+.wsOff { background: #f3f4f6; color: #6b7280; }
+
+/* ── Section header (title + preset buttons row) ────────────── */
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.presetBtns {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.presetBtn {
+  padding: 0.35rem 0.8rem;
+  border-radius: 6px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--border, #d1d5db);
+  background: var(--surface, #fff);
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+  &:hover:not(:disabled) { background: var(--surface-hover, #f3f4f6); }
+  &:disabled { opacity: 0.5; cursor: default; }
+}
+
+.presetBtnActive {
+  background: #dbeafe;
+  border-color: #93c5fd;
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+.loadingText { font-size: 0.875rem; color: var(--text-muted, #9ca3af); padding: 1rem 0; }
+.errorText   { font-size: 0.875rem; color: #b91c1c; padding: 1rem 0; }
+
+/* ── Chart cards ────────────────────────────────────────────── */
+.chartCard {
+  background: var(--surface, #fff);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--border, #e5e7eb);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.chartTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary, #111);
+  margin: 0;
+}
+
+.chartsRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1rem;
+}
+
+/* ── Trend SVG ──────────────────────────────────────────────── */
+.trendSvg {
+  width: 100%;
+  height: 100px;
+  display: block;
+}
+
+.trendLegend {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary, #6b7280);
+}
+
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+.trendDates {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: var(--text-muted, #9ca3af);
+}
+
+/* ── Bar chart (hourly) ─────────────────────────────────────── */
+.barChart {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 100px;
+  overflow-x: auto;
+  padding-bottom: 1.25rem;
+  position: relative;
+}
+
+.barItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+  min-width: 18px;
+}
+
+.barOuter {
+  width: 100%;
+  height: 76px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.barFill {
+  width: 100%;
+  border-radius: 3px 3px 0 0;
+  min-height: 2px;
+  transition: height 0.3s ease;
+}
+
+.barLabel {
+  font-size: 0.6rem;
+  color: var(--text-muted, #9ca3af);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Disposition breakdown ──────────────────────────────────── */
+.dispList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dispRow {
+  display: grid;
+  grid-template-columns: 140px 1fr 40px;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dispLabel {
+  font-size: 0.8rem;
+  color: var(--text-secondary, #6b7280);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dispBarWrap {
+  background: var(--surface-raised, #f3f4f6);
+  border-radius: 999px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.dispBar {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.dispCount {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-primary, #111);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Agent ranking table ────────────────────────────────────── */
+.rankNum {
+  font-weight: 700;
+  color: var(--text-muted, #9ca3af);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Dark mode ──────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  .title                { color: #f9fafb; }
+  .refreshBtn           { background: #1f2937; border-color: #374151; color: #d1d5db; &:hover:not(:disabled) { background: #374151; } }
+  .statTile             { background: #1f2937; border-color: #374151; }
+  .statLabel            { color: #9ca3af; }
+  .statSub              { color: #6b7280; }
+  .badge                { background: #374151; color: #9ca3af; }
+  .empty                { border-color: #374151; color: #6b7280; }
+  .tableWrap            { border-color: #374151; }
+  .table th             { background: #111827; color: #9ca3af; border-color: #374151; }
+  .table td             { color: #f3f4f6; border-color: #1f2937; }
+  .callStatus           { background: #374151; color: #9ca3af; }
+  .callStatus_answered  { background: #14532d; color: #86efac; }
+  .callStatus_ringing   { background: #713f12; color: #fde68a; }
+  .callStatus_initiated { background: #1e3a5f; color: #93c5fd; }
+  .agentCard            { background: #1f2937; border-color: #374151; }
+  .agentName            { color: #f3f4f6; }
+  .activeCallInfo       { background: #14532d; }
+  .phoneSmall           { color: #86efac; }
+  .durationSmall        { color: #4ade80; }
+  .noCall               { color: #6b7280; }
+  .sectionTitle         { color: #f9fafb; }
+  .listenBtn            { background: #1e3a5f; color: #93c5fd; &:hover:not(:disabled) { background: #1d4ed8; } }
+  .whisperBtn           { background: #3b0764; color: #d8b4fe; &:hover:not(:disabled) { background: #581c87; } }
+  .stopBtn              { background: #450a0a; color: #fca5a5; &:hover:not(:disabled) { background: #7f1d1d; } }
+
+  .wsOn               { background: #14532d; color: #86efac; }
+  .wsOff              { background: #1f2937; color: #6b7280; }
+  .presetBtn          { background: #1f2937; border-color: #374151; color: #d1d5db; &:hover:not(:disabled) { background: #374151; } }
+  .presetBtnActive    { background: #1e3a5f; border-color: #3b82f6; color: #93c5fd; }
+  .chartCard          { background: #1f2937; border-color: #374151; }
+  .chartTitle         { color: #f9fafb; }
+  .trendLegend        { color: #9ca3af; }
+  .trendDates         { color: #6b7280; }
+  .barLabel           { color: #6b7280; }
+  .dispLabel          { color: #9ca3af; }
+  .dispBarWrap        { background: #374151; }
+  .dispCount          { color: #f3f4f6; }
+  .rankNum            { color: #6b7280; }
+}

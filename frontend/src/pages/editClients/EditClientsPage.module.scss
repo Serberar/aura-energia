@@ -1,0 +1,108 @@
+/* EditClientsPage Styles - Usando sistema SCSS unificado */
+@use '../../styles/index.scss' as *;
+
+.container {
+  @extend .page-container;
+}
+
+.title {
+  @extend .page-main-title;
+}
+
+.welcome {
+  @extend .page-description;
+}
+
+.error {
+  @extend .error-message;
+  white-space: pre-line;
+}
+
+.success {
+  @extend .success-message;
+}
+
+.label {
+  @extend .form-label;
+}
+
+.input {
+  @extend .input-base;
+  margin-bottom: $spacing-lg;
+}
+
+.searchContainer {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+}
+
+.searchInput {
+  @extend .input-base;
+  width: 100%;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: $spacing-md;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.button {
+  @extend .btn-base;
+  margin-right: $spacing-md;
+  margin-top: $spacing-sm;
+  
+  &.search {
+    @extend .btn-search;
+  }
+  
+  &.clear {
+    @extend .btn-clear;
+  }
+  
+  &.add {
+    @extend .btn-add;
+    margin-top: $spacing-xl;
+  }
+  
+  &.remove {
+    @extend .btn-danger;
+  }
+
+  &.call {
+    background: #16a34a;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+    &:hover:not(:disabled) { background: #15803d; }
+    &:disabled { opacity: 0.55; cursor: default; }
+  }
+}
+
+.buttonSave {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2rem;
+}
+
+.row {
+  @extend .form-row;
+  @extend .section;
+}
+
+.section {
+  @extend .section;
+}
+
+.field {
+  @extend .form-group;
+}

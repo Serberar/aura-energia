@@ -1,0 +1,215 @@
+@use '../../styles/index.scss' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+
+  &.fullWidth {
+    width: 100%;
+  }
+}
+
+.label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: $text-primary;
+  margin-bottom: 0.25rem;
+
+  &.required {
+    .asterisk {
+      color: $error-color;
+      margin-left: 0.25rem;
+    }
+  }
+}
+
+.selectContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  border: 1px solid $border-color;
+  border-radius: $border-radius-md;
+  background: $background-primary;
+
+  transition: all 0.2s ease;
+
+  &.outlined {
+    background: $background-primary;
+  }
+
+  &.filled {
+    background: $background-secondary;
+    border-color: transparent;
+  }
+
+  &.focused {
+    border-color: $primary-color;
+    box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+  }
+
+  &.error {
+    border-color: $error-color;
+
+    &.focused {
+      box-shadow: 0 0 0 3px rgba($error-color, 0.1);
+    }
+  }
+
+  &.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: $background-secondary;
+
+    .select {
+      cursor: not-allowed;
+    }
+  }
+
+  &:hover:not(.disabled):not(.focused) {
+    border-color: darken($border-color, 15%);
+  }
+}
+
+// Tamaños
+.sm {
+  height: 32px;
+
+  .select {
+    font-size: 0.875rem;
+    padding: 0 $spacing-sm;
+    padding-right: 2rem;
+  }
+
+  &.hasStartAdornment .select {
+    padding-left: 2rem;
+  }
+
+  .startAdornment {
+    left: $spacing-xs;
+  }
+
+  .chevron {
+    right: $spacing-xs;
+  }
+}
+
+.md {
+  height: 40px;
+
+  .select {
+    font-size: 1rem;
+    padding: 0 $spacing-md;
+    padding-right: 2.5rem;
+  }
+
+  &.hasStartAdornment .select {
+    padding-left: 2.5rem;
+  }
+
+  .startAdornment {
+    left: $spacing-sm;
+  }
+
+  .chevron {
+    right: $spacing-sm;
+  }
+}
+
+.lg {
+  height: 48px;
+
+  .select {
+    font-size: 1.125rem;
+    padding: 0 $spacing-lg;
+    padding-right: 3rem;
+  }
+
+  &.hasStartAdornment .select {
+    padding-left: 3rem;
+  }
+
+  .startAdornment {
+    left: $spacing-md;
+  }
+
+  .chevron {
+    right: $spacing-md;
+  }
+}
+
+.select {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+
+  font-family: inherit;
+  color: $text-primary;
+  line-height: 1;
+
+  border: none;
+  background: transparent;
+  outline: none;
+
+  cursor: pointer;
+  appearance: none;
+
+  &::-ms-expand {
+    display: none;
+  }
+
+  option {
+    background: $background-primary;
+    color: $text-primary;
+    padding: $spacing-sm;
+
+    &:disabled {
+      color: $text-tertiary;
+    }
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.startAdornment {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $text-secondary;
+  pointer-events: none;
+}
+
+.chevron {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $text-secondary;
+  pointer-events: none;
+
+  transition: transform 0.2s ease;
+
+  .focused & {
+    transform: rotate(180deg);
+  }
+}
+
+.helperText {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  margin-top: 0.25rem;
+
+  .errorText {
+    color: $error-color;
+  }
+
+  .helpText {
+    color: $text-secondary;
+  }
+}

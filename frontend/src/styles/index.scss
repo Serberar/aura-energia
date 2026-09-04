@@ -1,0 +1,57 @@
+// Estilos principales - CRM Elite
+// Punto de entrada único para todos los estilos
+
+// === IMPORTS PRINCIPALES === //
+@forward 'core/variables';
+@forward 'core/mixins';
+
+@use 'core/variables' as *;
+@use 'core/mixins' as *;
+
+// === COMPONENTES === //
+@use 'components/layout';
+@use 'components/buttons';
+@use 'components/forms';
+
+// === UTILIDADES === //
+@use 'utils/helpers';
+
+// === RESET Y BASE === //
+// Reset y estilos base
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+  background: $background-primary;
+  color: $text-primary;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0 0 $spacing-md 0;
+  font-weight: $font-weight-semibold;
+  line-height: 1.3;
+}
+
+p {
+  margin: 0 0 $spacing-sm 0;
+  line-height: 1.6;
+}
+
+a {
+  color: $primary-color;
+  text-decoration: none;
+  transition: $transition-fast;
+  
+  &:hover {
+    color: $primary-dark;
+  }
+}

@@ -1,0 +1,219 @@
+// Formularios e Inputs - CRM Elite
+@use '../core/variables' as *;
+@use '../core/mixins' as *;
+
+// === GRUPOS DE FORMULARIO === //
+.form-group {
+  margin-bottom: $spacing-lg;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.form-row {
+  display: flex;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+  
+  .form-group {
+    flex: 1;
+    margin-bottom: 0;
+  }
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 0;
+    
+    .form-group {
+      margin-bottom: $spacing-lg;
+    }
+  }
+}
+
+// === FORMULARIOS === //
+.form-container {
+  background: $background-primary;
+  padding: $spacing-xl;
+  border-radius: $border-radius-xl;
+  border: 1px solid $border-color;
+  box-shadow: $shadow-md;
+  
+  @media (max-width: 768px) {
+    padding: $spacing-lg;
+    border-radius: $border-radius-lg;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+// === INPUTS === //
+.input-base {
+  padding: 0.875rem 1.25rem;
+  border: 1px solid rgba($gray-300, 0.6);
+  border-radius: $border-radius-md;
+  font-size: $font-size-base;
+  background: rgba($white, 0.8);
+  backdrop-filter: blur(5px);
+  transition: $transition-normal;
+  color: $text-primary;
+  width: 100%;
+  
+  @include input-focus($primary-color);
+  
+  &::placeholder {
+    color: $text-muted;
+    font-weight: $font-weight-normal;
+  }
+  
+  &.error {
+    border-color: $danger-color;
+    background: rgba(254, 226, 226, 0.1);
+    
+    &:focus {
+      border-color: $danger-color;
+      box-shadow: 0 0 0 3px rgba($danger-color, 0.1);
+    }
+  }
+  
+  &:disabled {
+    background: $background-secondary;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.input-search {
+  @extend .input-base;
+  padding-left: $spacing-xl;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236b7280' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: $spacing-md center;
+  background-size: 16px 16px;
+}
+
+.search-input {
+  @extend .input-search;
+}
+
+// === ETIQUETAS === //
+.label {
+  display: block;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $text-primary;
+  margin-bottom: $spacing-xs;
+}
+
+.form-label {
+  @extend .label;
+}
+
+.label-required {
+  @extend .label;
+  
+  &::after {
+    content: ' *';
+    color: $error-color;
+  }
+}
+
+// === MENSAJES === //
+.form-error {
+  font-size: $font-size-sm;
+  color: $error-color;
+  margin-top: $spacing-xs;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.error-message {
+  font-size: $font-size-sm;
+  color: $error-color;
+  margin-top: $spacing-xs;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  padding: $spacing-sm;
+  background: rgba($error-color, 0.1);
+  border: 1px solid rgba($error-color, 0.2);
+  border-radius: $border-radius-md;
+}
+
+.success-message {
+  font-size: $font-size-sm;
+  color: $success-color;
+  margin-top: $spacing-xs;
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  padding: $spacing-sm;
+  background: rgba($success-color, 0.1);
+  border: 1px solid rgba($success-color, 0.2);
+  border-radius: $border-radius-md;
+}
+
+.form-help {
+  font-size: $font-size-sm;
+  color: $text-secondary;
+  margin-top: $spacing-xs;
+}
+
+// === BOTONES DE FORMULARIO === //
+.form-actions {
+  display: flex;
+  justify-content: center;
+  gap: $spacing-md;
+  margin-top: $spacing-xl;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+}
+
+// === INPUTS ESPECÍFICOS === //
+.input {
+  @extend .input-base;
+}
+
+.textarea {
+  @extend .input-base;
+  min-height: 100px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.select {
+  @extend .input-base;
+  cursor: pointer;
+  
+  &:focus {
+    cursor: pointer;
+  }
+}
+
+.checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  cursor: pointer;
+  
+  input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: $primary-color;
+  }
+  
+  label {
+    cursor: pointer;
+    margin: 0;
+  }
+}

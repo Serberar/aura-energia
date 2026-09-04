@@ -1,0 +1,97 @@
+// Variables SCSS Globales - CRM Elite
+
+// Colores principales
+$primary-color: #193757;
+$primary-dark: #0f2a42;
+$primary-light: #2c5282;
+
+$secondary-color: #059669;
+$secondary-dark: #047857;
+$secondary-light: #10b981;
+
+$danger-color: #dc2626;
+$danger-dark: #b91c1c;
+$danger-light: #ef4444;
+
+$warning-color: #f59e0b;
+$warning-dark: #d97706;
+$warning-light: #fbbf24;
+
+// Colores neutrales
+$white: #ffffff;
+$gray-50: #f8f9fa;
+$gray-100: #e9ecef;
+$gray-200: #dee2e6;
+$gray-300: #ced4da;
+$gray-400: #adb5bd;
+$gray-500: #6c757d;
+$gray-600: #495057;
+$gray-700: #343a40;
+$gray-800: #212529;
+
+// Backgrounds
+$background-primary: $white;
+$background-secondary: $gray-50;
+$background-tertiary: $gray-100;
+
+// Borders  
+$border-color: $gray-200;
+$border-light: $gray-100;
+
+// Alias para compatibilidad
+$success-color: $secondary-color;
+$error-color: $danger-color;
+$accent-color: #e67e22;
+
+// Colores de texto
+$text-primary: #1e293b;
+$text-secondary: #475569;
+$text-tertiary: #94a3b8;
+$text-muted: #94a3b8;
+
+// Espaciado
+$spacing-xs: 0.25rem;   // 4px
+$spacing-sm: 0.5rem;    // 8px
+$spacing-md: 0.75rem;   // 12px
+$spacing-lg: 1rem;      // 16px
+$spacing-xl: 1.5rem;    // 24px
+$spacing-2xl: 2rem;     // 32px
+$spacing-3xl: 3rem;     // 48px
+
+// Tipografía
+$font-size-xs: 0.75rem;   // 12px
+$font-size-sm: 0.875rem;  // 14px
+$font-size-base: 1rem;    // 16px
+$font-size-lg: 1.125rem;  // 18px
+$font-size-xl: 1.25rem;   // 20px
+$font-size-2xl: 1.5rem;   // 24px
+$font-size-3xl: 1.875rem; // 30px
+$font-size-4xl: 2.25rem;  // 36px
+
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// Bordes y radios
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 12px;
+$border-radius-xl: 16px;
+
+// Sombras
+$shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+$shadow-md: 0 2px 8px rgba(0, 0, 0, 0.04);
+$shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.08);
+$shadow-xl: 0 8px 32px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.04);
+
+// Transiciones
+$transition-fast: all 0.2s ease;
+$transition-normal: all 0.3s ease;
+$transition-slow: all 0.5s ease;
+
+// Breakpoints
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;

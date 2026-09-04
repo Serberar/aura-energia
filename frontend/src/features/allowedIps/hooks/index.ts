@@ -1,0 +1,1 @@
+export { useAllowedIps } from './useAllowedIps';

@@ -1,0 +1,436 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+// ── Buttons ───────────────────────────────────────────────────────────────────
+
+.btnStart {
+  align-self: flex-start;
+  background: #16a34a;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  &:hover { background: #15803d; }
+}
+
+.btnStop {
+  align-self: flex-start;
+  background: none;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  &:hover { background: #f1f5f9; color: #0f172a; }
+}
+
+.btnNow {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  &:hover { background: #1d4ed8; }
+}
+
+// ── Progress bar ──────────────────────────────────────────────────────────────
+
+.progressBar {
+  display: flex;
+  gap: 4px;
+  height: 6px;
+}
+
+.progressChunk {
+  flex: 1;
+  border-radius: 3px;
+  background: #e2e8f0;
+  transition: background 0.3s;
+
+  &.chunkDone   { background: #16a34a; }
+  &.chunkActive { background: #2563eb; }
+}
+
+.progressLabel {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: -8px;
+}
+
+// ── Contact card ──────────────────────────────────────────────────────────────
+
+.contactCard {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.contactPhone {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: 0.02em;
+}
+
+.contactName {
+  font-size: 15px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.contactNotes {
+  font-size: 13px;
+  color: #64748b;
+  font-style: italic;
+}
+
+.previewRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.cdText {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.phaseTag {
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+
+  &.phaseAnswered { color: #16a34a; }
+  &.phaseNoAnswer { color: #dc2626; }
+  &.phaseWrapup   { color: #2563eb; }
+}
+
+// ── Hint text ─────────────────────────────────────────────────────────────────
+
+.hint {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.6;
+}
+
+// ── Done / summary ────────────────────────────────────────────────────────────
+
+.doneTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.summary {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.summaryItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.summaryNum {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1;
+
+  &.green { color: #16a34a; }
+  &.red   { color: #dc2626; }
+  &.blue  { color: #2563eb; }
+}
+
+.resultTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+
+  th {
+    text-align: left;
+    padding: 6px 10px;
+    color: #94a3b8;
+    font-weight: 600;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f1f5f9;
+    color: #334155;
+  }
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+
+  &.badgeGreen { background: #dcfce7; color: #16a34a; }
+  &.badgeGray  { background: #f1f5f9; color: #64748b; }
+}
+
+// ── Action row ────────────────────────────────────────────────────────────────
+
+.actionRow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.btnPause {
+  background: #f59e0b;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  &:hover { background: #d97706; }
+}
+
+.btnCancel {
+  background: none;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  &:hover { background: #f1f5f9; }
+}
+
+.btnResume {
+  background: #16a34a;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 8px;
+  &:hover { background: #15803d; }
+}
+
+// ── Pause overlay ──────────────────────────────────────────────────────────────
+
+.pauseOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(3px);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.pauseModal {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  min-width: 260px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+}
+
+.pauseTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.pauseEmoji2 {
+  font-size: 40px;
+}
+
+.pauseTimer {
+  font-size: 36px;
+  font-weight: 800;
+  color: #f59e0b;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.pauseReasonList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.pauseReasonBtn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: background 0.15s;
+  &:hover { background: #f1f5f9; border-color: #cbd5e1; }
+}
+
+.pauseEmoji {
+  font-size: 18px;
+}
+
+// ── Stats bar ──────────────────────────────────────────────────────────────────
+
+.statsBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.roundBadge {
+  background: #dbeafe;
+  color: #1d4ed8;
+  border-radius: 12px;
+  padding: 2px 10px;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.statGreen { color: #16a34a; font-weight: 700; }
+.statRed   { color: #dc2626; font-weight: 700; }
+.statBlue  { color: #2563eb; font-weight: 700; }
+
+// ── Pause log ──────────────────────────────────────────────────────────────────
+
+.pauseLog {
+  background: #fefce8;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pauseLogTitle {
+  font-size: 12px;
+  font-weight: 700;
+  color: #92400e;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pauseLogRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #78350f;
+}
+
+.pauseLogDur {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.pauseLogTotal {
+  font-size: 13px;
+  color: #92400e;
+  border-top: 1px solid #fde68a;
+  padding-top: 6px;
+  margin-top: 2px;
+}
+
+// ── Error message ──────────────────────────────────────────────────────────────
+
+.errMsg {
+  color: #dc2626;
+  font-size: 13px;
+  margin: 0;
+}
+
+// ── Dark mode ─────────────────────────────────────────────────────────────────
+
+@media (prefers-color-scheme: dark) {
+  .contactCard {
+    background: #1e293b;
+    border-color: #334155;
+  }
+  .contactPhone { color: #f1f5f9; }
+  .contactName  { color: #cbd5e1; }
+  .contactNotes { color: #94a3b8; }
+  .progressChunk { background: #334155; }
+  .doneTitle { color: #f1f5f9; }
+  .summaryNum { color: #f1f5f9; }
+  .btnStop {
+    border-color: #334155;
+    color: #94a3b8;
+    &:hover { background: #1e293b; color: #e2e8f0; }
+  }
+  .btnCancel {
+    border-color: #334155;
+    color: #94a3b8;
+    &:hover { background: #1e293b; }
+  }
+  .resultTable {
+    th { border-color: #334155; }
+    td { border-color: #1e293b; color: #cbd5e1; }
+  }
+  .badge.badgeGreen { background: #14532d; color: #4ade80; }
+  .badge.badgeGray  { background: #334155; color: #94a3b8; }
+  .pauseModal { background: #1e293b; }
+  .pauseTitle { color: #f1f5f9; }
+  .pauseReasonBtn {
+    background: #0f172a;
+    border-color: #334155;
+    color: #e2e8f0;
+    &:hover { background: #1e293b; }
+  }
+  .pauseLog {
+    background: #1c1407;
+    border-color: #78350f;
+  }
+  .pauseLogTitle { color: #fcd34d; }
+  .pauseLogRow   { color: #fde68a; }
+  .pauseLogTotal { color: #fcd34d; border-color: #78350f; }
+  .roundBadge { background: #1e3a5f; color: #93c5fd; }
+}

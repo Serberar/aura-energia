@@ -1,0 +1,335 @@
+/**
+ * Estilos para ContractPreview
+ * Las secciones se renderizan como páginas A4 apiladas verticalmente.
+ */
+
+// Contenedor externo que agrupa todas las páginas
+.pagesWrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem 0 2rem;
+  background: #e8e8e8;
+}
+
+// Badge de vista previa (fijado arriba a la derecha del wrapper)
+.previewBadge {
+  position: sticky;
+  top: 0.5rem;
+  align-self: flex-end;
+  margin-right: 0.5rem;
+  margin-bottom: -2.5rem;
+  z-index: 10;
+  background: rgba(255, 152, 0, 0.15);
+  border: 1px solid rgba(255, 152, 0, 0.5);
+  color: #b45309;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+// Wrapper externo por página (contiene la hoja A4 + aviso si desborda)
+.a4PageOuter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 680px;
+}
+
+// Página individual tipo A4 — altura fija al ratio exacto 210×297mm
+// 680px × 1.4143 ≈ 961px → usamos 960px
+.a4Page {
+  position: relative;
+  background: white;
+  width: 680px;
+  height: 960px;
+  overflow: hidden;
+  padding: 2.5rem 3rem;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 0.9rem;
+  color: #1a1a1a;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  box-sizing: border-box;
+
+  // Línea de límite visual en el borde inferior
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(to right, transparent, #ddd 15%, #ddd 85%, transparent);
+    pointer-events: none;
+  }
+}
+
+// Aviso que aparece bajo la página cuando el contenido no cabe
+.overflowWarning {
+  width: 100%;
+  padding: 0.55rem 1rem;
+  background: #fffbeb;
+  border: 1px solid #f59e0b;
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  font-size: 0.78rem;
+  color: #92400e;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+}
+
+// Cabecera del contrato
+.header {
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.mainTitle {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  margin: 0 0 0.5rem;
+  text-transform: uppercase;
+  color: #111;
+}
+
+.meta {
+  margin: 0.2rem 0;
+  font-size: 0.82rem;
+  color: #555;
+}
+
+// Separador horizontal
+.divider {
+  border: none;
+  border-top: 1px solid #999;
+  margin: 1.25rem 0;
+}
+
+// Sección genérica
+.section {
+  margin-bottom: 1.5rem;
+}
+
+.sectionTitle {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  margin: 0 0 0.75rem;
+  text-transform: uppercase;
+  color: #333;
+}
+
+// Tabla de datos del cliente (clave: valor)
+.dataTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+
+  td {
+    padding: 0.22rem 0.5rem 0.22rem 0;
+    vertical-align: top;
+  }
+}
+
+.dataLabel {
+  font-weight: 600;
+  color: #444;
+  width: 110px;
+  white-space: nowrap;
+}
+
+// Tabla de productos
+.productsTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+
+  th {
+    text-align: left;
+    padding: 0.4rem 0.5rem;
+    border-bottom: 2px solid #999;
+    font-weight: 700;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    color: #333;
+  }
+
+  td {
+    padding: 0.4rem 0.5rem;
+    border-bottom: 1px solid #e0e0e0;
+    vertical-align: top;
+  }
+
+  // Primera columna (concepto) ocupa más espacio
+  th:first-child,
+  td:first-child {
+    width: 55%;
+  }
+
+  // Columnas numéricas alineadas a la derecha
+  th:not(:first-child),
+  td:not(:first-child) {
+    text-align: right;
+  }
+}
+
+// Título de subsección de productos (periódico, consumo, etc.)
+.subSectionTitle {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #555;
+  margin: 0.75rem 0 0.35rem;
+}
+
+// Fila del total
+.totalRow {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 0.75rem;
+  padding-top: 0.5rem;
+  border-top: 2px solid #999;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.totalAmount {
+  font-size: 1.05rem;
+}
+
+// Sección de firma
+.signatureNote {
+  font-size: 0.875rem;
+  color: #555;
+  margin: 0 0 0.4rem;
+}
+
+.signatureEmail {
+  font-size: 0.875rem;
+  color: #333;
+  margin: 0 0 1.75rem;
+}
+
+.signatureArea {
+  max-width: 240px;
+}
+
+.signatureLine {
+  border-bottom: 1px solid #333;
+  height: 48px;
+  margin-bottom: 0.35rem;
+}
+
+.signatureName {
+  font-size: 0.875rem;
+  margin: 0;
+  color: #333;
+}
+
+.signatureLabel {
+  font-size: 0.75rem;
+  color: #888;
+  margin: 0.1rem 0 0;
+}
+
+// Pie de página
+.footer {
+  border-top: 1px solid #e0e0e0;
+  padding-top: 1rem;
+  margin-top: 2rem;
+
+  p {
+    font-size: 0.72rem;
+    color: #999;
+    text-align: center;
+    margin: 0.2rem 0;
+  }
+}
+
+// Logo de empresa
+.logoWrap {
+  margin-top: 0.5rem;
+  margin-bottom: 1.1rem;
+}
+
+.logo {
+  max-height: 80px;
+  max-width: 200px;
+  object-fit: contain;
+}
+
+.companyName {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 0.3rem;
+}
+
+// Texto de introducción / cabecera
+.introText {
+  font-size: 0.875rem;
+  color: #444;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+// Cláusulas
+.clausulasText {
+  font-size: 0.875rem;
+  color: #444;
+  line-height: 1.6;
+}
+
+// Páginas extra (paginasExtra) — misma clase .a4Page, solo se añaden estilos de contenido
+.extraPageTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #222;
+  margin: 0 0 0.75rem;
+}
+
+.extraPageContent {
+  font-size: 0.875rem;
+  color: #444;
+  line-height: 1.6;
+}
+
+// Responsive (pantallas pequeñas)
+@media (max-width: 720px) {
+  .a4Page {
+    width: 100%;
+    height: auto;
+    min-height: unset;
+    overflow: visible;
+    padding: 1.5rem 1.25rem;
+  }
+
+  .a4PageOuter {
+    width: 100%;
+  }
+
+  .overflowWarning {
+    display: none; // en móvil no aplica el límite A4
+  }
+
+  .mainTitle {
+    font-size: 1.1rem;
+  }
+
+  .pagesWrapper {
+    padding: 0.75rem 0 1rem;
+    gap: 0.75rem;
+    background: #f0f0f0;
+  }
+}

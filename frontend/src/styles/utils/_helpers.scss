@@ -1,0 +1,39 @@
+// Utilidades y Helpers - CRM Elite
+@use '../core/variables' as *;
+
+// === UTILIDADES DE TEXTO === //
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+// === UTILIDADES DE ESPACIADO === //
+.mb-0 { margin-bottom: 0; }
+.mb-sm { margin-bottom: $spacing-sm; }
+.mb-md { margin-bottom: $spacing-md; }
+.mb-lg { margin-bottom: $spacing-lg; }
+.mb-xl { margin-bottom: $spacing-xl; }
+
+.mt-0 { margin-top: 0; }
+.mt-sm { margin-top: $spacing-sm; }
+.mt-md { margin-top: $spacing-md; }
+.mt-lg { margin-top: $spacing-lg; }
+.mt-xl { margin-top: $spacing-xl; }
+
+// === UTILIDADES DE ESTADOS === //
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+  user-select: none;
+}
+
+.error {
+  color: $danger-color;
+}
+
+.success {
+  color: $secondary-color;
+}
+
+.warning {
+  color: $warning-color;
+}

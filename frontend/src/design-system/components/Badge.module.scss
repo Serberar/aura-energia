@@ -1,0 +1,193 @@
+@use '../../styles/index.scss' as *;
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+
+  border-radius: $border-radius-sm;
+
+  transition: all 0.2s ease;
+
+  &.clickable {
+    cursor: pointer;
+    user-select: none;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $primary-color;
+      outline-offset: 2px;
+    }
+  }
+}
+
+// Tamaños
+.sm {
+  height: 20px;
+  padding: 0 $spacing-xs;
+  font-size: 0.75rem;
+  gap: 0.25rem;
+
+  &.withDot .dot {
+    width: 6px;
+    height: 6px;
+  }
+}
+
+.md {
+  height: 24px;
+  padding: 0 $spacing-sm;
+  font-size: 0.875rem;
+  gap: 0.375rem;
+
+  &.withDot .dot {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+.lg {
+  height: 28px;
+  padding: 0 $spacing-md;
+  font-size: 1rem;
+  gap: $spacing-xs;
+
+  &.withDot .dot {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+// Variantes de color
+.primary {
+  background: rgba($primary-color, 0.1);
+  color: $primary-color;
+  border: 1px solid rgba($primary-color, 0.2);
+
+  .dot {
+    background: $primary-color;
+  }
+
+  &.clickable:hover {
+    background: rgba($primary-color, 0.15);
+    border-color: rgba($primary-color, 0.3);
+  }
+}
+
+.secondary {
+  background: rgba($text-secondary, 0.1);
+  color: $text-secondary;
+  border: 1px solid rgba($text-secondary, 0.2);
+
+  .dot {
+    background: $text-secondary;
+  }
+
+  &.clickable:hover {
+    background: rgba($text-secondary, 0.15);
+    border-color: rgba($text-secondary, 0.3);
+  }
+}
+
+.success {
+  background: rgba($success-color, 0.1);
+  color: darken($success-color, 10%);
+  border: 1px solid rgba($success-color, 0.2);
+
+  .dot {
+    background: $success-color;
+  }
+
+  &.clickable:hover {
+    background: rgba($success-color, 0.15);
+    border-color: rgba($success-color, 0.3);
+  }
+}
+
+.warning {
+  background: rgba($warning-color, 0.1);
+  color: darken($warning-color, 15%);
+  border: 1px solid rgba($warning-color, 0.2);
+
+  .dot {
+    background: $warning-color;
+  }
+
+  &.clickable:hover {
+    background: rgba($warning-color, 0.15);
+    border-color: rgba($warning-color, 0.3);
+  }
+}
+
+.danger {
+  background: rgba($error-color, 0.1);
+  color: $error-color;
+  border: 1px solid rgba($error-color, 0.2);
+
+  .dot {
+    background: $error-color;
+  }
+
+  &.clickable:hover {
+    background: rgba($error-color, 0.15);
+    border-color: rgba($error-color, 0.3);
+  }
+}
+
+.info {
+  background: rgba(#3b82f6, 0.1);
+  color: #3b82f6;
+  border: 1px solid rgba(#3b82f6, 0.2);
+
+  .dot {
+    background: #3b82f6;
+  }
+
+  &.clickable:hover {
+    background: rgba(#3b82f6, 0.15);
+    border-color: rgba(#3b82f6, 0.3);
+  }
+}
+
+.neutral {
+  background: $background-secondary;
+  color: $text-primary;
+  border: 1px solid $border-color;
+
+  .dot {
+    background: $text-secondary;
+  }
+
+  &.clickable:hover {
+    background: darken($background-secondary, 3%);
+    border-color: darken($border-color, 10%);
+  }
+}
+
+// Punto indicador
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.content {
+  display: inline-flex;
+  align-items: center;
+}

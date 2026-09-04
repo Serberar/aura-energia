@@ -1,0 +1,191 @@
+@use '../../styles/index.scss' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+
+  &.fullWidth {
+    width: 100%;
+  }
+}
+
+.label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: $text-primary;
+  margin-bottom: 0.25rem;
+
+  &.required {
+    .asterisk {
+      color: $error-color;
+      margin-left: 0.25rem;
+    }
+  }
+}
+
+.inputContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  border: 1px solid $border-color;
+  border-radius: $border-radius-md;
+  background: $background-primary;
+
+  transition: all 0.2s ease;
+
+  &.outlined {
+    background: $background-primary;
+  }
+
+  &.filled {
+    background: $background-secondary;
+    border-color: transparent;
+  }
+
+  &.focused {
+    border-color: $primary-color;
+    box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+  }
+
+  &.error {
+    border-color: $error-color;
+
+    &.focused {
+      box-shadow: 0 0 0 3px rgba($error-color, 0.1);
+    }
+  }
+
+  &.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: $background-secondary;
+
+    .input {
+      cursor: not-allowed;
+    }
+  }
+
+  &:hover:not(.disabled):not(.focused) {
+    border-color: darken($border-color, 15%);
+  }
+}
+
+// Tamaños
+.sm {
+  height: 32px;
+
+  .input {
+    font-size: 0.875rem;
+    padding: 0 $spacing-sm 0 2rem;
+  }
+
+  .iconWrapper {
+    left: $spacing-xs;
+  }
+}
+
+.md {
+  height: 40px;
+
+  .input {
+    font-size: 1rem;
+    padding: 0 $spacing-md 0 2.5rem;
+  }
+
+  .iconWrapper {
+    left: $spacing-sm;
+  }
+}
+
+.lg {
+  height: 48px;
+
+  .input {
+    font-size: 1.125rem;
+    padding: 0 $spacing-lg 0 3rem;
+  }
+
+  .iconWrapper {
+    left: $spacing-md;
+  }
+}
+
+.iconWrapper {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $text-secondary;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.icon {
+  display: block;
+}
+
+.input {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+
+  font-family: inherit;
+  color: $text-primary;
+  line-height: 1;
+
+  border: none;
+  background: transparent;
+  outline: none;
+
+  &::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+
+  // Estilos para navegadores que soportan color-scheme
+  color-scheme: light;
+
+  @media (prefers-color-scheme: dark) {
+    color-scheme: dark;
+  }
+}
+
+.helperText {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  margin-top: 0.25rem;
+
+  .errorText {
+    color: $error-color;
+  }
+
+  .helpText {
+    color: $text-secondary;
+  }
+}
+
+// Estilos específicos para inputs de tipo date y datetime-local
+input[type='date'],
+input[type='datetime-local'] {
+  &::-webkit-inner-spin-button,
+  &::-webkit-calendar-picker-indicator {
+    filter: opacity(0.6);
+  }
+
+  &:hover::-webkit-calendar-picker-indicator {
+    filter: opacity(1);
+  }
+}

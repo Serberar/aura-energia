@@ -1,0 +1,287 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum CallStatus {
+  initiated
+  ringing
+  answered
+  completed
+  no_answer
+  busy
+  failed
+}
+
+enum CallDirection {
+  outbound
+  inbound
+}
+
+enum AgentStatus {
+  offline
+  available
+  busy
+  paused
+}
+
+enum PauseReason {
+  break
+  lunch
+  admin
+  training
+  personal
+}
+
+enum AgendaStatus {
+  pending
+  called
+  cancelled
+  rescheduled
+}
+
+enum Priority {
+  low
+  normal
+  high
+}
+
+model Call {
+  id             String        @id @default(uuid())
+  agentId        String
+  clientId       String?
+  saleId         String?
+  clientPhone    String
+  providerCallId String?       @unique
+
+  status         CallStatus    @default(initiated)
+  direction      CallDirection @default(outbound)
+
+  duration       Int?
+  recordingUrl   String?
+  disposition    String?
+  muted          Boolean   @default(false)
+  onHold         Boolean   @default(false)
+  notes          String?
+
+  dispositionCodeId String?
+  dispositionCode   DispositionCode? @relation(fields: [dispositionCodeId], references: [id])
+  agentNotes        String?
+  wrapUpStartedAt   DateTime?
+  wrapUpEndedAt     DateTime?
+
+  agendaEntryId  String?
+  agendaEntry    AgendaEntry?  @relation(fields: [agendaEntryId], references: [id])
+
+  startedAt      DateTime?
+  answeredAt     DateTime?
+  endedAt        DateTime?
+  createdAt      DateTime      @default(now())
+
+  events             CallEvent[]
+  monitoringSessions CallMonitoringSession[]
+  queueEntry         CallQueue?
+
+  @@index([agentId])
+  @@index([clientId])
+  @@index([saleId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model CallEvent {
+  id        String   @id @default(uuid())
+  callId    String
+  call      Call     @relation(fields: [callId], references: [id], onDelete: Cascade)
+  event     String
+  payload   Json?
+  createdAt DateTime @default(now())
+
+  @@index([callId])
+}
+
+model AgendaEntry {
+  id          String       @id @default(uuid())
+  agentId     String
+  clientId    String?
+  saleId      String?
+  clientPhone String
+  clientName  String?
+  scheduledAt DateTime
+  reminderAt  DateTime?
+  notes       String?
+  status      AgendaStatus @default(pending)
+  priority    Priority     @default(normal)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  calls       Call[]
+
+  @@index([agentId])
+  @@index([status])
+  @@index([scheduledAt])
+  @@index([reminderAt])
+}
+
+model AgentSession {
+  agentId      String       @id
+  agentName    String?
+  status       AgentStatus  @default(offline)
+  extension    String?
+  activeCallId String?
+  pauseReason  PauseReason?
+  updatedAt    DateTime     @updatedAt
+}
+
+model AgentPauseLog {
+  id        String      @id @default(uuid())
+  agentId   String
+  reason    PauseReason
+  startedAt DateTime    @default(now())
+  endedAt   DateTime?
+  duration  Int?
+
+  @@index([agentId])
+  @@index([startedAt])
+}
+
+model DncEntry {
+  id        String    @id @default(uuid())
+  phone     String    @unique
+  addedById String
+  reason    String?
+  expiresAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([phone])
+}
+
+model CallScript {
+  id        String   @id @default(uuid())
+  name      String
+  content   String
+  order     Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  campaigns Campaign[]
+}
+
+model DispositionCode {
+  id        String  @id @default(uuid())
+  label     String
+  color     String  @default("#6b7280")
+  isDefault Boolean @default(false)
+  order     Int     @default(0)
+  active    Boolean @default(true)
+
+  calls     Call[]
+}
+
+enum DialListStatus {
+  draft
+  active
+  paused
+  completed
+}
+
+enum DialEntryStatus {
+  pending
+  calling
+  called
+  skipped
+  dnc
+}
+
+model DialList {
+  id        String         @id @default(uuid())
+  name      String
+  status    DialListStatus @default(draft)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  entries  DialListEntry[]
+  campaign Campaign?
+
+  @@index([status])
+}
+
+enum CampaignStatus {
+  draft
+  active
+  paused
+  completed
+  cancelled
+}
+
+model Campaign {
+  id            String         @id @default(uuid())
+  name          String
+  description   String?
+  status        CampaignStatus @default(draft)
+  crmFilter     Json?
+  scriptId      String?
+  script        CallScript?    @relation(fields: [scriptId], references: [id])
+  maxAttempts   Int            @default(3)
+  dialListId    String?        @unique
+  dialList      DialList?      @relation(fields: [dialListId], references: [id])
+  createdBy     String
+  totalImported Int            @default(0)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([status])
+}
+
+model DialListEntry {
+  id            String          @id @default(uuid())
+  listId        String
+  list          DialList        @relation(fields: [listId], references: [id], onDelete: Cascade)
+  phone         String
+  clientId      String?
+  saleId        String?
+  clientName    String?
+  notes         String?
+  status        DialEntryStatus @default(pending)
+  attempts      Int             @default(0)
+  lastCallId    String?
+  lastAttemptAt DateTime?
+  nextAttemptAt DateTime?
+  createdAt     DateTime        @default(now())
+
+  @@index([listId])
+  @@index([status])
+  @@index([listId, status])
+  @@index([nextAttemptAt])
+}
+
+model CallQueue {
+  id           String   @id @default(uuid())
+  callId       String   @unique
+  call         Call     @relation(fields: [callId], references: [id], onDelete: Cascade)
+  fromPhone    String
+  toPhone      String
+  position     Int      @default(0)
+  enteredAt    DateTime @default(now())
+  answeredAt   DateTime?
+
+  @@index([enteredAt])
+}
+
+model CallMonitoringSession {
+  id           String    @id @default(uuid())
+  callId       String
+  call         Call      @relation(fields: [callId], references: [id], onDelete: Cascade)
+  supervisorId String
+  mode         String    // 'silent' | 'whisper'
+  startedAt    DateTime  @default(now())
+  endedAt      DateTime?
+
+  @@index([callId])
+  @@index([supervisorId])
+}

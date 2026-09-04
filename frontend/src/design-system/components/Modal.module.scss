@@ -1,0 +1,250 @@
+@use '../../styles/index.scss' as *;
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-lg;
+  z-index: 1000;
+  
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal {
+  background-color: $background-primary;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-xl;
+  border: 1px solid $border-light;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  width: 100%;
+  position: relative;
+  
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+// Tamaños
+.sm {
+  max-width: 400px;
+}
+
+.md {
+  max-width: 500px;
+}
+
+.lg {
+  max-width: 800px;
+}
+
+.xl {
+  max-width: 1200px;
+}
+
+.fullscreen {
+  max-width: 95vw;
+  max-height: 95vh;
+}
+
+// Header
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-lg;
+  border-bottom: 1px solid $border-color;
+  background: $background-secondary;
+  border-radius: $border-radius-lg $border-radius-lg 0 0;
+}
+
+.title {
+  @extend .title-secondary;
+  margin: 0;
+  font-size: $font-size-xl;
+  color: $text-primary;
+}
+
+.closeButton {
+  @extend .btn-secondary;
+  background: transparent;
+  border: none;
+  padding: $spacing-xs;
+  border-radius: $border-radius-sm;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: $text-secondary;
+
+  &:hover {
+    background: #dc3545;
+    color: white;
+  }
+}
+
+// Body
+.body {
+  flex: 1;
+  padding: $spacing-lg;
+  overflow-y: auto;
+  color: $text-primary;
+}
+
+.bodyNoPadding {
+  flex: 1;
+  overflow-y: auto;
+}
+
+// Footer
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: $spacing-sm;
+  padding: $spacing-lg;
+  border-top: 1px solid $border-color;
+  background: $background-secondary;
+  border-radius: 0 0 $border-radius-lg $border-radius-lg;
+}
+
+// Variantes especiales para dashboard
+.dashboardModal {
+  @extend .modal;
+  @include glass-effect;
+  border: 2px solid rgba(25, 55, 87, 0.2);
+  
+  .header {
+    background: linear-gradient(135deg, $primary-color 0%, lighten($primary-color, 10%) 100%);
+    color: white;
+    
+    .title {
+      color: white;
+    }
+    
+    .closeButton {
+      color: white;
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+  
+  .body {
+    background: rgba(255, 255, 255, 0.95);
+  }
+  
+  .footer {
+    background: $background-secondary;
+  }
+}
+
+// Modal para edición de datos
+.editModal {
+  @extend .dashboardModal;
+  
+  .inputGroup {
+    margin-bottom: $spacing-lg;
+    
+    label {
+      display: block;
+      margin-bottom: $spacing-sm;
+      font-weight: $font-weight-semibold;
+      color: $text-primary;
+    }
+    
+    input, textarea, select {
+      width: 100%;
+      padding: $spacing-sm $spacing-md;
+      border: 2px solid $border-color;
+      border-radius: $border-radius-md;
+      font-size: $font-size-base;
+      font-family: inherit;
+      background: $background-primary;
+      color: $text-primary;
+      transition: all 0.2s ease;
+      
+      &:focus {
+        outline: none;
+        border-color: $primary-color;
+        box-shadow: 0 0 0 3px rgba(25, 55, 87, 0.1);
+      }
+      
+      &:hover:not(:focus) {
+        border-color: lighten($primary-color, 20%);
+      }
+    }
+    
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+  }
+  
+  .saveButton {
+    @extend .btn-primary;
+    background: linear-gradient(135deg, $success-color 0%, darken($success-color, 10%) 100%);
+    padding: $spacing-sm $spacing-xl;
+    font-weight: $font-weight-semibold;
+    
+    &:hover {
+      background: linear-gradient(135deg, darken($success-color, 5%) 0%, darken($success-color, 15%) 100%);
+      @include hover-lift;
+    }
+  }
+  
+  .cancelButton {
+    @extend .btn-secondary;
+    padding: $spacing-sm $spacing-lg;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .overlay {
+    padding: $spacing-sm;
+  }
+  
+  .modal {
+    max-height: 95vh;
+    margin: $spacing-sm;
+  }
+  
+  .header, .body, .footer {
+    padding: $spacing-md;
+  }
+  
+  .footer {
+    flex-direction: column;
+    gap: $spacing-sm;
+    
+    button {
+      width: 100%;
+    }
+  }
+}

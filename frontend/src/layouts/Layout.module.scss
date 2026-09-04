@@ -1,0 +1,40 @@
+@use '../styles/index.scss' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: $background-primary;
+}
+
+.main {
+  flex: 1;
+  padding: $spacing-lg;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.demoBanner {
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  background: #92400e;
+  color: #fef3c7;
+  text-align: center;
+  padding: 7px 16px;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 768px) {
+  .main {
+    padding: $spacing-md;
+  }
+}
+
+@media (max-width: 480px) {
+  .main {
+    padding: $spacing-sm;
+  }
+}

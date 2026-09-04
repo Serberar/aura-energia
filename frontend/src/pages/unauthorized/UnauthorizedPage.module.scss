@@ -1,0 +1,77 @@
+@use '../../styles/index.scss' as *;
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: $background-secondary;
+}
+
+.card {
+    background: $background-primary;
+    border: 1px solid $border-color;
+    border-radius: $border-radius-lg;
+    padding: $spacing-xl;
+    box-shadow: $shadow-lg;
+    transition: all 0.2s ease;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    border-left: 4px solid $error-color;
+}
+
+.title {
+    font-size: 1.8rem;
+    font-weight: $font-weight-bold;
+    color: $error-color;
+    margin-bottom: $spacing-md;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-sm;
+    
+    &::before {
+        content: "⚠️";
+        font-size: 2rem;
+    }
+}
+
+.message {
+    font-size: $font-size-base;
+    color: $text-secondary;
+    margin-bottom: $spacing-lg;
+    line-height: 1.5;
+}
+
+.button {
+    @extend .btn-primary;
+    padding: 0.75rem $spacing-lg;
+    font-size: $font-size-base;
+    transition: all 0.3s ease;
+    
+    &:hover {
+        @include hover-lift;
+    }
+}
+
+.icon {
+    font-size: 3rem;
+    margin-bottom: $spacing-md;
+    color: $error-color;
+}
+
+@media (max-width: 480px) {
+    .card {
+        padding: $spacing-lg;
+        margin: $spacing-md;
+    }
+    
+    .title {
+        font-size: 1.5rem;
+    }
+    
+    .message {
+        font-size: $font-size-sm;
+    }
+}

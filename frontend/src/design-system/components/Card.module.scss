@@ -1,0 +1,103 @@
+@use '../../styles/index.scss' as *;
+
+.card {
+  position: relative;
+  background-color: $background-primary;
+  border-radius: $border-radius-lg;
+  transition: all 0.2s ease;
+  
+  border: none;
+  outline: none;
+  font-family: inherit;
+  color: inherit;
+  text-align: inherit;
+  cursor: inherit;
+  
+  &:focus-visible {
+    outline: 2px solid $primary-color;
+    outline-offset: 2px;
+  }
+}
+
+// Variantes
+.default {
+  @extend .card-base;
+}
+
+.outlined {
+  background-color: $background-primary;
+  border: 2px solid $border-color;
+}
+
+.elevated {
+  background-color: $background-primary;
+  border: 1px solid $border-light;
+  box-shadow: $shadow-md;
+}
+
+// Padding
+.padding-none {
+  padding: 0;
+}
+
+.padding-sm {
+  padding: $spacing-sm;
+}
+
+.padding-md {
+  padding: $spacing-md;
+}
+
+.padding-lg {
+  padding: $spacing-lg;
+}
+
+.padding-xl {
+  padding: $spacing-xl;
+}
+
+// Estados interactivos
+.clickable {
+  cursor: pointer;
+  
+  &:hover {
+    @include hover-lift;
+    box-shadow: $shadow-lg;
+  }
+  
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+// Estados especiales
+.loading {
+  position: relative;
+  overflow: hidden;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 1.5s infinite;
+  }
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  
+  &:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}

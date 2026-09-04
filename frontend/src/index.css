@@ -1,0 +1,34 @@
+/* index.css */
+
+/* Importar variables del design system */
+@import './design-system/variables.css';
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Estilos base */
+html, body, #root {
+  height: 100%;
+  font-family: var(--font-family-sans);
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  line-height: var(--line-height-normal);
+}
+
+/* Listas y enlaces sin estilos nativos */
+ul, ol {
+  list-style: none;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Variables específicas de la aplicación */
+:root {
+  --sidebar-width: 240px;
+}

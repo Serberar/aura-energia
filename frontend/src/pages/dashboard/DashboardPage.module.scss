@@ -1,0 +1,73 @@
+/* DashboardPage Styles - Usando sistema SCSS unificado */
+@use '../../styles/index.scss' as *;
+
+.container {
+  @extend .page-container;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: $spacing-xl;
+}
+
+.header h2 {
+  @extend .page-title;
+}
+
+.pageMainTitle {
+  @extend .page-main-title;
+}
+
+.description {
+  @extend .page-description;
+}
+
+.section {
+  @extend .card-base;
+  margin: $spacing-xl 0;
+}
+
+.section:hover {
+  transform: translateY(-2px);
+  box-shadow: $shadow-lg;
+}
+
+.section h3 {
+  @extend .title-secondary;
+  margin-bottom: $spacing-md;
+}
+
+.searchContainer {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+}
+
+.searchInput {
+  @extend .search-input;
+  width: 100%;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: $spacing-md;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.button {
+  @extend .btn-base;
+}
+
+.button.search {
+  @extend .btn-search;
+}
+
+.button.clear {
+  @extend .btn-clear;
+}
+
+.error {
+  @extend .error-message;
+}

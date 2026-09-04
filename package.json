@@ -1,0 +1,16 @@
+{
+  "name": "crm",
+  "private": true,
+  "scripts": {
+    "dev": "npm run db:up && concurrently --names \"CORE,CRM ,CALLS,CONN,FRONT\" --prefix-colors \"cyan.bold,yellow.bold,green.bold,magenta.bold,blue.bold\" \"npm --prefix core-service run dev\" \"npm --prefix crm-service run dev\" \"npm --prefix calls-service run dev\" \"npm --prefix calls-connector run dev\" \"npm --prefix frontend run dev\"",
+    "dev:back": "npm run db:up && concurrently --names \"CORE,CRM ,CALLS,CONN\" --prefix-colors \"cyan.bold,yellow.bold,green.bold,magenta.bold\" \"npm --prefix core-service run dev\" \"npm --prefix crm-service run dev\" \"npm --prefix calls-service run dev\" \"npm --prefix calls-connector run dev\"",
+    "dev:front": "npm --prefix frontend run dev",
+    "db:up": "docker start crm-postgres 2>nul || docker compose up -d",
+    "db:down": "docker compose down",
+    "db:logs": "docker compose logs -f postgres",
+    "db:reset": "docker compose down -v && docker compose up -d"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

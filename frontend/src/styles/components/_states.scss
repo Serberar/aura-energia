@@ -1,0 +1,224 @@
+// Estados y Elementos de UI - CRM Elite
+@use '../core/variables' as *;
+@use '../core/mixins' as *;
+
+// === ESTADOS DE CARGA === //
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: $spacing-xl;
+  
+  &.loading-page {
+    min-height: 200px;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: $spacing-2xl;
+  color: $text-secondary;
+  
+  .empty-icon {
+    font-size: 3rem;
+    margin-bottom: $spacing-lg;
+    opacity: 0.5;
+  }
+  
+  .empty-title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-medium;
+    margin-bottom: $spacing-sm;
+  }
+  
+  .empty-description {
+    font-size: $font-size-sm;
+    margin-bottom: $spacing-lg;
+  }
+}
+
+// === TABLAS === //
+.table-container {
+  background: $background-primary;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-sm;
+  overflow: hidden;
+  border: 1px solid $border-color;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  
+  th {
+    background: $background-secondary;
+    padding: $spacing-md $spacing-lg;
+    text-align: left;
+    font-weight: $font-weight-semibold;
+    color: $text-primary;
+    border-bottom: 1px solid $border-color;
+    font-size: $font-size-sm;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  td {
+    padding: $spacing-md $spacing-lg;
+    border-bottom: 1px solid rgba($border-color, 0.5);
+    color: $text-primary;
+    
+    &:first-child {
+      font-weight: $font-weight-medium;
+    }
+  }
+  
+  tr {
+    transition: $transition-fast;
+    
+    &:hover {
+      background: rgba($primary-color, 0.03);
+    }
+    
+    &:last-child td {
+      border-bottom: none;
+    }
+  }
+}
+
+// === PAGINACIÓN === //
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-top: $spacing-lg;
+  padding: $spacing-lg;
+  
+  .pagination-info {
+    color: $text-secondary;
+    font-size: $font-size-sm;
+    margin: 0 $spacing-md;
+  }
+}
+
+// === BADGES Y ESTADOS === //
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: $border-radius-full;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  
+  &.badge-success {
+    background: rgba($success-color, 0.1);
+    color: $success-color;
+    border: 1px solid rgba($success-color, 0.2);
+  }
+  
+  &.badge-warning {
+    background: rgba($warning-color, 0.1);
+    color: $warning-color;
+    border: 1px solid rgba($warning-color, 0.2);
+  }
+  
+  &.badge-danger {
+    background: rgba($danger-color, 0.1);
+    color: $danger-color;
+    border: 1px solid rgba($danger-color, 0.2);
+  }
+  
+  &.badge-info {
+    background: rgba($info-color, 0.1);
+    color: $info-color;
+    border: 1px solid rgba($info-color, 0.2);
+  }
+  
+  &.badge-primary {
+    background: rgba($primary-color, 0.1);
+    color: $primary-color;
+    border: 1px solid rgba($primary-color, 0.2);
+  }
+}
+
+// === FILTROS === //
+.filters-section {
+  background: $background-primary;
+  padding: $spacing-lg;
+  border-radius: $border-radius-lg;
+  border: 1px solid $border-color;
+  margin-bottom: $spacing-lg;
+  
+  .filters-title {
+    font-size: $font-size-md;
+    font-weight: $font-weight-semibold;
+    color: $text-primary;
+    margin-bottom: $spacing-md;
+  }
+  
+  .filters-row {
+    display: flex;
+    gap: $spacing-md;
+    align-items: flex-end;
+    
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+}
+
+// === ACCIONES DE TABLA === //
+.table-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-lg;
+  
+  .actions-left {
+    display: flex;
+    gap: $spacing-md;
+    align-items: center;
+  }
+  
+  .actions-right {
+    display: flex;
+    gap: $spacing-sm;
+    align-items: center;
+  }
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: $spacing-md;
+    
+    .actions-left,
+    .actions-right {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}
+
+// === GRID RESPONSIVO === //
+.grid {
+  display: grid;
+  gap: $spacing-lg;
+  
+  &.grid-1 { grid-template-columns: 1fr; }
+  &.grid-2 { grid-template-columns: repeat(2, 1fr); }
+  &.grid-3 { grid-template-columns: repeat(3, 1fr); }
+  &.grid-4 { grid-template-columns: repeat(4, 1fr); }
+  
+  @media (max-width: 1024px) {
+    &.grid-4 { grid-template-columns: repeat(2, 1fr); }
+    &.grid-3 { grid-template-columns: repeat(2, 1fr); }
+  }
+  
+  @media (max-width: 768px) {
+    &.grid-4,
+    &.grid-3,
+    &.grid-2 { grid-template-columns: 1fr; }
+  }
+}

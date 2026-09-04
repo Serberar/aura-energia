@@ -1,0 +1,216 @@
+// Cards y Contenedores - CRM Elite
+@use '../core/variables' as *;
+@use '../core/mixins' as *;
+
+// === CARDS BÁSICAS === //
+.card {
+  background: $background-primary;
+  border-radius: $border-radius-lg;
+  border: 1px solid $border-color;
+  box-shadow: $shadow-sm;
+  overflow: hidden;
+  transition: $transition-normal;
+  
+  &:hover {
+    box-shadow: $shadow-md;
+    transform: translateY(-2px);
+  }
+}
+
+.card-header {
+  padding: $spacing-lg;
+  border-bottom: 1px solid $border-color;
+  background: rgba($background-secondary, 0.3);
+  
+  .card-title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $text-primary;
+    margin: 0;
+  }
+  
+  .card-subtitle {
+    font-size: $font-size-sm;
+    color: $text-secondary;
+    margin: $spacing-xs 0 0 0;
+  }
+}
+
+.card-body {
+  padding: $spacing-lg;
+}
+
+.card-footer {
+  padding: $spacing-lg;
+  border-top: 1px solid $border-color;
+  background: rgba($background-secondary, 0.3);
+  display: flex;
+  justify-content: flex-end;
+  gap: $spacing-md;
+}
+
+// === CARDS ESPECIALES === //
+.stats-card {
+  @extend .card;
+  text-align: center;
+  padding: $spacing-xl;
+  
+  .stats-value {
+    font-size: $font-size-4xl;
+    font-weight: $font-weight-bold;
+    color: $primary-color;
+    margin-bottom: $spacing-sm;
+    line-height: 1;
+  }
+  
+  .stats-label {
+    font-size: $font-size-sm;
+    color: $text-secondary;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: $spacing-xs;
+  }
+  
+  .stats-change {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    
+    &.positive {
+      color: $success-color;
+    }
+    
+    &.negative {
+      color: $danger-color;
+    }
+  }
+}
+
+.profile-card {
+  @extend .card;
+  text-align: center;
+  
+  .profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: $spacing-lg auto $spacing-md;
+    border: 3px solid $primary-color;
+    object-fit: cover;
+  }
+  
+  .profile-name {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $text-primary;
+    margin-bottom: $spacing-xs;
+  }
+  
+  .profile-role {
+    font-size: $font-size-sm;
+    color: $text-secondary;
+    margin-bottom: $spacing-lg;
+  }
+}
+
+// === LISTA DE CARDS === //
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: $spacing-lg;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: $spacing-md;
+  }
+}
+
+.cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+// === CONTENEDORES === //
+.content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 $spacing-lg;
+  
+  @media (max-width: 768px) {
+    padding: 0 $spacing-md;
+  }
+}
+
+.sidebar-content {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: $spacing-xl;
+  
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+    gap: $spacing-lg;
+  }
+}
+
+// === MODALES === //
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: $spacing-lg;
+}
+
+.modal-content {
+  background: $background-primary;
+  border-radius: $border-radius-xl;
+  box-shadow: $shadow-2xl;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  
+  .modal-header {
+    padding: $spacing-xl $spacing-xl $spacing-lg;
+    border-bottom: 1px solid $border-color;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    .modal-title {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-semibold;
+      color: $text-primary;
+      margin: 0;
+    }
+  }
+  
+  .modal-body {
+    padding: $spacing-xl;
+  }
+  
+  .modal-footer {
+    padding: $spacing-lg $spacing-xl $spacing-xl;
+    border-top: 1px solid $border-color;
+    display: flex;
+    justify-content: flex-end;
+    gap: $spacing-md;
+  }
+}
+
+// === MODALES ESPECÍFICOS === //
+.modal {
+  @extend .modal-content;
+}
+
+.dashboardModal {
+  @extend .modal-content;
+  max-width: 800px;
+}

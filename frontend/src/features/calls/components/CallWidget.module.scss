@@ -1,0 +1,444 @@
+.fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #16a34a;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,.25);
+  z-index: 9000;
+  transition: background 0.2s;
+
+  &:hover { background: #15803d; }
+  &:disabled { background: #9ca3af; cursor: not-allowed; }
+}
+
+.activeCard {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 280px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.18);
+  z-index: 9000;
+  overflow: hidden;
+
+  @media (prefers-color-scheme: dark) {
+    background: #1f2937;
+    color: #f9fafb;
+  }
+}
+
+.cardHeader {
+  background: #16a34a;
+  color: #fff;
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statusRinging { background: #d97706; }
+.statusAnswered { background: #16a34a; }
+.statusInitiated { background: #2563eb; }
+
+.cardBody {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.phone {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.statusHold { background: #b45309; }
+
+.clientInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 0;
+  border-top: 1px solid rgba(0,0,0,.06);
+  border-bottom: 1px solid rgba(0,0,0,.06);
+
+  @media (prefers-color-scheme: dark) {
+    border-color: rgba(255,255,255,.08);
+  }
+}
+
+.clientName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+
+  @media (prefers-color-scheme: dark) { color: #f1f5f9; }
+}
+
+.clientAddr {
+  font-size: 11px;
+  color: #64748b;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.recRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.recDot {
+  font-size: 11px;
+  font-weight: 700;
+  color: #ef4444;
+  animation: blink 1.2s step-end infinite;
+}
+.recUpload { font-size: 11px; color: #3b82f6; }
+.recDone   { font-size: 11px; color: #16a34a; }
+.recError  { font-size: 11px; color: #f59e0b; }
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+.statusLabel {
+  text-align: center;
+  font-size: 12px;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.timer {
+  text-align: center;
+  font-size: 18px;
+  font-variant-numeric: tabular-nums;
+  color: #374151;
+
+  @media (prefers-color-scheme: dark) { color: #d1d5db; }
+}
+
+/* ── In-call controls ─────────────────────────────────────── */
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.ctrlBtn {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s;
+
+  &:hover { background: #e5e7eb; }
+  &.ctrlActive {
+    background: #dbeafe;
+    border-color: #3b82f6;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background: #374151;
+    border-color: #4b5563;
+    color: #f9fafb;
+    &:hover { background: #4b5563; }
+    &.ctrlActive { background: #1e3a5f; border-color: #60a5fa; }
+  }
+}
+
+.dtmfGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.dtmfKey {
+  height: 34px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.1s;
+
+  &:hover { background: #e5e7eb; }
+  &:active { background: #d1d5db; }
+
+  @media (prefers-color-scheme: dark) {
+    background: #374151;
+    border-color: #4b5563;
+    color: #f9fafb;
+    &:hover { background: #4b5563; }
+  }
+}
+
+.notesPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.notesArea {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  padding: 8px;
+  font-size: 13px;
+  resize: vertical;
+  outline: none;
+  box-sizing: border-box;
+  font-family: inherit;
+
+  &:focus { border-color: #16a34a; }
+
+  @media (prefers-color-scheme: dark) {
+    background: #374151;
+    border-color: #4b5563;
+    color: #f9fafb;
+  }
+}
+
+.saveNotesBtn {
+  align-self: flex-end;
+  padding: 4px 14px;
+  border-radius: 6px;
+  border: none;
+  background: #16a34a;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover { background: #15803d; }
+  &.saved { background: #6b7280; }
+}
+
+.scriptPanel {
+  margin-top: 4px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+  max-height: 220px;
+  display: flex;
+  flex-direction: column;
+
+  @media (prefers-color-scheme: dark) { border-color: #374151; }
+}
+
+.scriptTabs {
+  display: flex;
+  overflow-x: auto;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+
+  @media (prefers-color-scheme: dark) { background: #111827; border-color: #374151; }
+}
+
+.scriptTab {
+  padding: 4px 10px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 11px;
+  white-space: nowrap;
+  color: #6b7280;
+
+  @media (prefers-color-scheme: dark) { color: #9ca3af; }
+}
+
+.scriptTabActive {
+  font-weight: 700;
+  color: #2563eb;
+  border-bottom: 2px solid #2563eb;
+}
+
+.scriptContent {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  font-size: 11px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+  font-family: inherit;
+  color: #374151;
+
+  @media (prefers-color-scheme: dark) { color: #d1d5db; }
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.hangupBtn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #dc2626;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(220,38,38,.4);
+  transition: background 0.2s;
+
+  &:hover { background: #b91c1c; }
+}
+
+.dialer {
+  position: fixed;
+  bottom: 90px;
+  right: 24px;
+  width: 260px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.18);
+  padding: 16px;
+  z-index: 9000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  @media (prefers-color-scheme: dark) {
+    background: #1f2937;
+  }
+}
+
+.dialerTitle {
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  color: #374151;
+
+  @media (prefers-color-scheme: dark) { color: #f9fafb; }
+}
+
+.dialerInput {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 18px;
+  text-align: center;
+  letter-spacing: 2px;
+  outline: none;
+  box-sizing: border-box;
+
+  &:focus { border-color: #16a34a; }
+
+  @media (prefers-color-scheme: dark) {
+    background: #374151;
+    border-color: #4b5563;
+    color: #f9fafb;
+  }
+}
+
+.dialGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.dialKey {
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background 0.1s;
+
+  &:hover { background: #e5e7eb; }
+
+  @media (prefers-color-scheme: dark) {
+    background: #374151;
+    border-color: #4b5563;
+    color: #f9fafb;
+    &:hover { background: #4b5563; }
+  }
+}
+
+.callBtn {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  background: #16a34a;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background 0.2s;
+
+  &:hover { background: #15803d; }
+  &:disabled { background: #9ca3af; cursor: not-allowed; }
+}
+
+.closeDialer {
+  width: 100%;
+  padding: 6px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+  font-size: 13px;
+  color: #6b7280;
+
+  &:hover { background: #f3f4f6; }
+}
+
+.wsIndicator {
+  position: fixed;
+  bottom: 88px;
+  right: 88px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #dc2626;
+  z-index: 9001;
+  transition: background 0.3s;
+
+  &.connected { background: #16a34a; }
+}

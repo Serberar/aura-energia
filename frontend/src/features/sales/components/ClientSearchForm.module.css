@@ -1,0 +1,373 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
+}
+
+/* Sección de búsqueda */
+.searchSection {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+
+.searchInput {
+  flex: 1;
+}
+
+/* Mensajes de error y estado */
+.error {
+  background-color: var(--error-bg, #fee);
+  border: 1px solid var(--error-border, #fcc);
+  border-radius: 4px;
+  padding: 0.75rem;
+  color: var(--error-text, #c33);
+  font-size: 0.875rem;
+}
+
+.success {
+  background-color: var(--success-bg, #efe);
+  border: 1px solid var(--success-border, #cfc);
+  border-radius: 4px;
+  padding: 0.75rem;
+  color: var(--success-text, #363);
+  font-size: 0.875rem;
+}
+
+/* Información del cliente encontrado */
+.clientInfo {
+  background-color: var(--bg-secondary, #f9f9f9);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.clientInfoTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin: 0 0 0.5rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.clientInfoContent {
+  font-size: 1rem;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.clientName {
+  font-weight: 600;
+  color: var(--primary-color, #007bff);
+}
+
+/* Formulario editable */
+.editableForm {
+  background-color: white;
+  border: 2px solid var(--primary-color, #007bff);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.formSection {
+  margin-bottom: 1.5rem;
+}
+
+.formSection:last-child {
+  margin-bottom: 0;
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.formGridFull {
+  grid-column: 1 / -1;
+}
+
+/* Arrays dinámicos (teléfonos, direcciones, etc.) */
+.arraySection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.arrayItem {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-end;
+}
+
+.arrayItemInput {
+  flex: 1;
+}
+
+.arrayActions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+/* Direcciones con múltiples campos */
+.addressItem {
+  background-color: var(--bg-secondary, #f9f9f9);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 6px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.addressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+}
+
+.addressLabel {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.addressFields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Botones de acción del formulario */
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color, #e0e0e0);
+}
+
+/* Mensaje de ayuda */
+.helpText {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  background-color: var(--info-bg, #e7f3ff);
+  border-left: 3px solid var(--info-border, #2196f3);
+  border-radius: 4px;
+}
+
+/* Estados de carga */
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary);
+}
+
+/* Mensaje vacío */
+.emptyMessage {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary);
+  background-color: var(--bg-secondary, #f9f9f9);
+  border: 2px dashed var(--border-color, #e0e0e0);
+  border-radius: 6px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .searchSection {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .formActions {
+    flex-direction: column-reverse;
+  }
+
+  .formActions button {
+    width: 100%;
+  }
+
+  .arrayActions {
+    flex-direction: column;
+  }
+
+  .arrayActions button {
+    width: 100%;
+  }
+}
+
+/* Estilos adicionales */
+.searchInputWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.searchBox {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  flex: 1;
+}
+
+.searchButton {
+  flex-shrink: 0;
+  /* Baja el botón hasta alinearlo con el campo de texto, compensando la label */
+  margin-top: 1.5rem;
+}
+
+.arrayLabel {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.addressGroup {
+  background-color: var(--bg-secondary, #f9f9f9);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 6px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.addressSelectRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.confirmedBadge {
+  background-color: var(--success-bg, #d4edda);
+  border: 1px solid var(--success-border, #c3e6cb);
+  color: var(--success-text, #155724);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  display: inline-block;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
+
+  .searchBox {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* Enlace a modo manual (debajo del buscador) */
+.manualLink {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: var(--text-secondary, #666);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  align-self: flex-start;
+  margin-top: 0.25rem;
+  transition: color 0.15s;
+}
+
+.manualLink:hover {
+  color: var(--primary-color, #007bff);
+}
+
+/* Banner de modo manual */
+.manualBanner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1rem;
+  background-color: #fff8e1;
+  border: 1px solid #ffe082;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  color: #795548;
+}
+
+.manualBannerText {
+  flex: 1;
+  font-weight: 500;
+}
+
+/* Enlace volver a búsqueda */
+.backToSearchLink {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: var(--primary-color, #007bff);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+
+.backToSearchLink:hover {
+  opacity: 0.75;
+}
+
+/* Sin direcciones */
+.noAddresses {
+  background-color: var(--warning-bg, #fff3cd);
+  border: 1px solid var(--warning-border, #ffc107);
+  border-radius: 6px;
+  padding: 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.noAddressesText {
+  color: var(--warning-text, #856404);
+  margin: 0;
+  font-size: 0.95rem;
+}

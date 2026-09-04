@@ -1,0 +1,288 @@
+// Navegación - CRM Elite
+@use '../core/variables' as *;
+@use '../core/mixins' as *;
+
+// === MENÚ PRINCIPAL === //
+.nav-menu {
+  display: flex;
+  gap: $spacing-lg;
+  align-items: center;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-md $spacing-lg;
+  border-radius: $border-radius-md;
+  color: $text-secondary;
+  text-decoration: none;
+  font-weight: $font-weight-medium;
+  transition: $transition-fast;
+  
+  &:hover {
+    color: $primary-color;
+    background: rgba($primary-color, 0.1);
+  }
+  
+  &.active {
+    color: $primary-color;
+    background: rgba($primary-color, 0.1);
+    font-weight: $font-weight-semibold;
+  }
+}
+
+// === BREADCRUMBS === //
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-lg;
+  
+  .breadcrumb-item {
+    color: $text-secondary;
+    font-size: $font-size-sm;
+    
+    &:not(:last-child)::after {
+      content: '/';
+      margin-left: $spacing-sm;
+      color: $text-muted;
+    }
+    
+    &:last-child {
+      color: $text-primary;
+      font-weight: $font-weight-medium;
+    }
+    
+    a {
+      color: inherit;
+      text-decoration: none;
+      
+      &:hover {
+        color: $primary-color;
+      }
+    }
+  }
+}
+
+// === SIDEBAR === //
+.sidebar {
+  background: $background-primary;
+  border-right: 1px solid $border-color;
+  height: 100vh;
+  overflow-y: auto;
+  padding: $spacing-lg 0;
+  
+  .sidebar-header {
+    padding: 0 $spacing-lg $spacing-lg;
+    border-bottom: 1px solid $border-color;
+    margin-bottom: $spacing-lg;
+    
+    .sidebar-title {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-bold;
+      color: $text-primary;
+      margin: 0;
+    }
+  }
+  
+  .sidebar-section {
+    margin-bottom: $spacing-xl;
+    
+    .sidebar-section-title {
+      font-size: $font-size-xs;
+      font-weight: $font-weight-semibold;
+      color: $text-muted;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0 $spacing-lg $spacing-sm;
+      margin-bottom: $spacing-sm;
+    }
+  }
+  
+  .sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    padding: $spacing-sm $spacing-lg;
+    color: $text-secondary;
+    text-decoration: none;
+    transition: $transition-fast;
+    
+    &:hover {
+      background: rgba($primary-color, 0.05);
+      color: $primary-color;
+    }
+    
+    &.active {
+      background: rgba($primary-color, 0.1);
+      color: $primary-color;
+      border-right: 3px solid $primary-color;
+      font-weight: $font-weight-medium;
+    }
+    
+    .sidebar-icon {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
+// === TABS === //
+.tabs {
+  border-bottom: 1px solid $border-color;
+  margin-bottom: $spacing-lg;
+  
+  .tabs-list {
+    display: flex;
+    gap: $spacing-lg;
+    
+    @media (max-width: 768px) {
+      overflow-x: auto;
+      gap: $spacing-md;
+    }
+  }
+  
+  .tab-button {
+    padding: $spacing-md 0;
+    border: none;
+    background: none;
+    color: $text-secondary;
+    font-weight: $font-weight-medium;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: $transition-fast;
+    white-space: nowrap;
+    
+    &:hover {
+      color: $primary-color;
+    }
+    
+    &.active {
+      color: $primary-color;
+      border-bottom-color: $primary-color;
+    }
+  }
+}
+
+// === DROPDOWN === //
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-sm $spacing-md;
+  border: 1px solid $border-color;
+  border-radius: $border-radius-md;
+  background: $background-primary;
+  color: $text-primary;
+  cursor: pointer;
+  transition: $transition-fast;
+  
+  &:hover {
+    border-color: $primary-color;
+  }
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: $background-primary;
+  border: 1px solid $border-color;
+  border-radius: $border-radius-md;
+  box-shadow: $shadow-lg;
+  z-index: 100;
+  min-width: 200px;
+  
+  .dropdown-item {
+    display: block;
+    padding: $spacing-sm $spacing-md;
+    color: $text-primary;
+    text-decoration: none;
+    transition: $transition-fast;
+    
+    &:hover {
+      background: rgba($primary-color, 0.05);
+      color: $primary-color;
+    }
+    
+    &:first-child {
+      border-radius: $border-radius-md $border-radius-md 0 0;
+    }
+    
+    &:last-child {
+      border-radius: 0 0 $border-radius-md $border-radius-md;
+    }
+  }
+  
+  .dropdown-divider {
+    height: 1px;
+    background: $border-color;
+    margin: $spacing-xs 0;
+  }
+}
+
+// === PAGINACIÓN === //
+.pagination-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: $spacing-sm;
+  margin: $spacing-xl 0;
+  
+  .pagination-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid $border-color;
+    border-radius: $border-radius-md;
+    background: $background-primary;
+    color: $text-secondary;
+    text-decoration: none;
+    font-weight: $font-weight-medium;
+    transition: $transition-fast;
+    
+    &:hover {
+      border-color: $primary-color;
+      color: $primary-color;
+    }
+    
+    &.active {
+      background: $primary-color;
+      border-color: $primary-color;
+      color: white;
+    }
+    
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      
+      &:hover {
+        border-color: $border-color;
+        color: $text-secondary;
+      }
+    }
+  }
+  
+  .pagination-info {
+    margin: 0 $spacing-lg;
+    color: $text-secondary;
+    font-size: $font-size-sm;
+  }
+}

@@ -1,0 +1,346 @@
+@use 'sass:color';
+@use '../../../styles/index.scss' as *;
+
+.searchResultsContainer {
+  margin-top: $spacing-lg;
+}
+
+.searchHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+  padding: 0.75rem;
+  background-color: $background-secondary;
+  border-radius: $border-radius-md;
+  border-left: 4px solid $primary-color;
+}
+
+.searchTerm {
+  font-weight: 600;
+  color: $text-primary;
+}
+
+.removeButton {
+  @extend .btn-secondary;
+  background: $error-color;
+  color: white;
+  padding: $spacing-xs 0.75rem;
+  font-size: 0.875rem;
+  
+  &:hover {
+    background: color.adjust($error-color, $lightness: -10%);
+  }
+}
+
+.resultSection {
+  margin-bottom: $spacing-xl;
+  border: 1px solid $border-color;
+  border-radius: $border-radius-md;
+  overflow: hidden;
+  box-shadow: $shadow-sm;
+}
+
+.sectionTitle {
+  @extend .title-secondary;
+  background: $background-secondary;
+  margin: 0;
+  padding: $spacing-md;
+  font-size: 1.1rem;
+  border-bottom: 1px solid $border-color;
+}
+
+.noResults {
+  padding: $spacing-xl;
+  text-align: center;
+  color: $text-muted;
+  font-style: italic;
+}
+
+.clientCard {
+  padding: $spacing-lg;
+  border-bottom: 1px solid $border-color;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  
+  &:hover {
+    background-color: $background-secondary;
+    @include hover-lift;
+  }
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.clientHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+  
+  h5 {
+    margin: 0;
+    color: $text-primary;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+}
+
+.clientDni {
+  background: $primary-color;
+  color: white;
+  padding: 0.25rem $spacing-sm;
+  border-radius: $border-radius-sm;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.clientDetails {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+}
+
+.clientDetail {
+  display: flex;
+  flex-direction: column;
+  
+  strong {
+    color: $text-secondary;
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  span {
+    color: $text-primary;
+    font-weight: 500;
+  }
+}
+
+.clientActions {
+  display: flex;
+  gap: $spacing-sm;
+  justify-content: flex-end;
+  margin-top: $spacing-md;
+}
+
+.editButton, .deleteButton {
+  @extend .btn-base;
+  padding: $spacing-xs $spacing-sm;
+  font-size: 0.875rem;
+  min-width: auto;
+}
+
+.editButton {
+  @extend .btn-primary;
+}
+
+.deleteButton {
+  @extend .btn-danger;
+}
+
+.contactInfo {
+  margin-top: $spacing-sm;
+  padding: $spacing-sm;
+  background: $background-secondary;
+  border-radius: $border-radius-sm;
+  border-left: 3px solid $primary-color;
+  
+  .phoneList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    
+    li {
+      padding: 0.25rem 0;
+      color: $text-secondary;
+      
+      a {
+        color: $primary-color;
+        text-decoration: none;
+        
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+.commentsList {
+  margin-top: $spacing-sm;
+  max-height: 150px;
+  overflow-y: auto;
+  
+  .comment {
+    padding: $spacing-sm;
+    margin-bottom: $spacing-xs;
+    background: $background-secondary;
+    border-radius: $border-radius-sm;
+    border-left: 3px solid $accent-color;
+    
+    .commentDate {
+      font-size: 0.75rem;
+      color: $text-muted;
+      margin-bottom: 0.25rem;
+    }
+    
+    .commentText {
+      color: $text-secondary;
+      font-size: 0.875rem;
+    }
+  }
+}
+
+.expandButton {
+  @extend .btn-secondary;
+  margin-top: $spacing-sm;
+  padding: $spacing-xs $spacing-sm;
+  font-size: 0.875rem;
+  width: 100%;
+  background: transparent;
+  border: 1px dashed $border-color;
+  color: $text-muted;
+  
+  &:hover {
+    background: $background-secondary;
+    border-color: $primary-color;
+    color: $primary-color;
+  }
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: $spacing-xl;
+  color: $text-muted;
+  
+  &::after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border: 2px solid $border-color;
+    border-top: 2px solid $primary-color;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: $spacing-sm;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// === FORMULARIO DE AÑADIR DATOS === //
+.addDataSection {
+  margin-top: $spacing-lg;
+  padding: $spacing-lg;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: $border-radius-md;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  }
+  
+  h4 {
+    margin: 0 0 $spacing-md 0;
+    color: $text-primary;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+}
+
+.formRow {
+  display: flex;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+  flex-wrap: wrap;
+}
+
+.formInput {
+  padding: 0.875rem 1.25rem;
+  border: 2px solid #193757;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #ffffff;
+  color: #1f2937;
+  flex: 1;
+  min-width: 200px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  
+  &:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    background: #ffffff;
+  }
+  
+  &::placeholder {
+    color: #6b7280;
+    font-weight: normal;
+  }
+}
+
+.saveButton {
+  padding: 0.8rem 1.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  background: linear-gradient(135deg, #193757 0%, #1e40af 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(25, 55, 87, 0.3);
+  
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(25, 55, 87, 0.4);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+@media (max-width: 768px) {
+  .searchHeader {
+    flex-direction: column;
+    gap: $spacing-sm;
+    text-align: center;
+  }
+  
+  .clientHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $spacing-sm;
+  }
+  
+  .clientDetails {
+    grid-template-columns: 1fr;
+  }
+  
+  .clientActions {
+    justify-content: center;
+  }
+  
+  .formRow {
+    flex-direction: column;
+  }
+  
+  .formInput {
+    min-width: auto;
+  }
+}

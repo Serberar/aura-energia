@@ -1,0 +1,123 @@
+@use '../../styles/index.scss' as *;
+
+.container {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+
+  &.dotOnly {
+    gap: 0;
+  }
+}
+
+// Tamaños
+.sm {
+  .dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .text {
+    font-size: 0.75rem;
+  }
+}
+
+.md {
+  .dot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .text {
+    font-size: 0.875rem;
+  }
+}
+
+.lg {
+  .dot {
+    width: 12px;
+    height: 12px;
+  }
+
+  .text {
+    font-size: 1rem;
+  }
+}
+
+// Punto indicador
+.dot {
+  display: inline-block;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  &.pulse {
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 50%;
+      background: inherit;
+      opacity: 0.5;
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+  }
+}
+
+// Variantes de color
+.dot.success {
+  background: $success-color;
+}
+
+.dot.warning {
+  background: $warning-color;
+}
+
+.dot.danger {
+  background: $error-color;
+}
+
+.dot.info {
+  background: #3b82f6;
+}
+
+.dot.neutral {
+  background: $text-secondary;
+}
+
+.dot.processing {
+  background: $primary-color;
+
+  // Processing siempre tiene pulse
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    background: inherit;
+    opacity: 0.5;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+}
+
+// Texto
+.text {
+  color: $text-primary;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+// Animación de pulso
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
