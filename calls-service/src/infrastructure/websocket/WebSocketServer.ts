@@ -25,11 +25,20 @@ const SUPERVISOR_ROLES = new Set(['administrador', 'coordinador']);
 
 const HEARTBEAT_INTERVAL_MS = 30_000;
 const AUTH_TIMEOUT_MS       = 10_000;
+const DISCONNECT_GRACE_MS   = 10_000;
 
 export class WebSocketServer {
   private wss:          WsServer;
   private clients     = new Map<string, Set<AuthenticatedClient>>();
   private monitorSessions = new Map<string, MonitorSession>(); // callId → MonitorSession
+  private disconnectHandler?: (agentId: string) => void;
+
+  // Called once from server.ts (after agentStatusUC exists) so that when an
+  // agent's last tab closes and doesn't reconnect within the grace period,
+  // their status is forced to 'offline' instead of staying stuck forever.
+  onAgentFullyDisconnected(fn: (agentId: string) => void): void {
+    this.disconnectHandler = fn;
+  }
 
   constructor() {
     this.wss = new WsServer({ noServer: true });
@@ -228,13 +237,24 @@ export class WebSocketServer {
     ws.on('close', () => {
       clearTimeout(authTimeout);
       if (!agentId) return;
+      const disconnectedAgentId = agentId;
 
-      const set = this.clients.get(agentId);
+      const set = this.clients.get(disconnectedAgentId);
       if (set) {
         for (const c of set) {
           if (c.ws === ws) { set.delete(c); break; }
         }
-        if (set.size === 0) this.clients.delete(agentId);
+        if (set.size === 0) {
+          this.clients.delete(disconnectedAgentId);
+          // Grace period: a page refresh or brief network blip closes and
+          // reopens the socket within a second or two. Only declare the agent
+          // offline if no tab has reconnected by the time this fires.
+          setTimeout(() => {
+            if (!this.clients.has(disconnectedAgentId)) {
+              this.disconnectHandler?.(disconnectedAgentId);
+            }
+          }, DISCONNECT_GRACE_MS);
+        }
       }
 
       // Clean up any monitor sessions this supervisor was in

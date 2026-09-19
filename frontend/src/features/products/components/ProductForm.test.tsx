@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ProductForm from './ProductForm';
@@ -12,7 +12,7 @@ const SAMPLE_PRODUCT = {
   description: 'Potente laptop',
   sku: 'DELL-001',
   price: 1299.99,
-  isActive: true,
+  active: true,
   createdAt: '2024-01-01',
   updatedAt: '2024-01-01',
 };

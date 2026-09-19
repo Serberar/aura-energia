@@ -4,7 +4,8 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { MemoryRouter } from 'react-router-dom';
 import callsReducer from '@/features/calls/callsSlice';
-import supervisorReducer from '@/features/calls/supervisorSlice';
+import supervisorReducer, { type SupervisorState } from '@/features/calls/supervisorSlice';
+import type { CallsState, AgentSession } from '@/features/calls/types';
 import SupervisorPage from '../SupervisorPage';
 
 vi.mock('@/features/calls/services/supervisorService', () => ({
@@ -40,7 +41,7 @@ const makeStats = (overrides = {}) => ({
   agents: { total: 5, online: 5, available: 2, busy: 3, paused: 0, offline: 0 },
 });
 
-const makeAgent = (overrides = {}) => ({
+const makeAgent = (overrides: Partial<AgentSession> = {}): AgentSession => ({
   agentId: 'agent-1', status: 'available',
   updatedAt: new Date().toISOString(), ...overrides,
 });
@@ -53,7 +54,7 @@ const makeActiveCall = (overrides = {}) => ({
   ...overrides,
 });
 
-const makeStore = (supervisorState = {}) =>
+const makeStore = (supervisorState: Partial<SupervisorState> = {}) =>
   configureStore({
     reducer: { calls: callsReducer, supervisor: supervisorReducer },
     preloadedState: {
@@ -61,14 +62,15 @@ const makeStore = (supervisorState = {}) =>
         activeCall: null, pendingWrapUp: null, incomingCall: null,
         queueEntries: [], predictiveStats: null, callHistory: [],
         total: 0, agendaEntries: [], reminders: [], loading: false,
-        error: null, wsConnected: false, agentStatus: 'offline', dialerOpen: false,
-      },
+        error: null, wsConnected: false, agentStatus: 'offline', dialerOpen: false, demoActive: false,
+      } satisfies CallsState,
       supervisor: {
         stats: null, activeCalls: [], agents: [],
         loading: false, error: null, lastRefresh: null,
+        historical: null, historicalLoading: false, historicalError: null,
         ...supervisorState,
-      },
-    } as any,
+      } satisfies SupervisorState,
+    },
   });
 
 const renderPage = (store = makeStore()) =>

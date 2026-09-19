@@ -1,11 +1,11 @@
 import { describe, it, expect, vi, beforeEach, type Mock } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { MemoryRouter } from 'react-router-dom';
 import callsReducer from '@/features/calls/callsSlice';
 import CallsPage from '../CallsPage';
-import type { Call } from '@/features/calls/types';
+import type { Call, CallsState, AgentStatus } from '@/features/calls/types';
 
 // ── Mocks ────────────────────────────────────────────────────────────────────
 vi.mock('@/features/calls/services/callService', () => ({
@@ -34,7 +34,7 @@ const makeCall = (overrides: Partial<Call> = {}): Call => ({
   ...overrides,
 });
 
-const makeStore = (agentStatus = 'offline') =>
+const makeStore = (agentStatus: AgentStatus = 'offline') =>
   configureStore({
     reducer: { calls: callsReducer },
     preloadedState: {
@@ -44,9 +44,9 @@ const makeStore = (agentStatus = 'offline') =>
         callHistory: [], total: 0,
         agendaEntries: [], reminders: [],
         loading: false, error: null, wsConnected: false,
-        agentStatus: agentStatus as any, dialerOpen: false,
-      },
-    } as any,
+        agentStatus, dialerOpen: false, demoActive: false,
+      } satisfies CallsState,
+    },
   });
 
 const renderPage = (store = makeStore()) =>

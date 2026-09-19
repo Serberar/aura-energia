@@ -10,7 +10,7 @@ import {
 } from './services/supervisorService';
 import type { AgentSession } from './types';
 
-interface SupervisorState {
+export interface SupervisorState {
   stats:           SupervisorStats | null;
   activeCalls:     ActiveCallInfo[];
   agents:          AgentSession[];
@@ -56,18 +56,21 @@ const supervisorSlice = createSlice({
   name: 'supervisor',
   initialState,
   reducers: {
-    wsAgentStatusChanged(state, action: { payload: { agentId: string; status: string; agentName?: string } }) {
-      const { agentId, status, agentName } = action.payload;
+    wsAgentStatusChanged(state, action: { payload: { agentId: string; status: string; agentName?: string; pauseReason?: string | null; updatedAt?: string } }) {
+      const { agentId, status, agentName, pauseReason, updatedAt } = action.payload;
       const agent = state.agents.find((a) => a.agentId === agentId);
       if (agent) {
         agent.status = status as AgentSession['status'];
+        agent.pauseReason = pauseReason as AgentSession['pauseReason'];
+        agent.updatedAt = updatedAt ?? new Date().toISOString();
         if (agentName) agent.agentName = agentName;
       } else {
         state.agents.push({
           agentId,
           agentName: agentName ?? null,
           status: status as AgentSession['status'],
-          updatedAt: new Date().toISOString(),
+          pauseReason: pauseReason as AgentSession['pauseReason'],
+          updatedAt: updatedAt ?? new Date().toISOString(),
         });
       }
       state.activeCalls.forEach((c) => {

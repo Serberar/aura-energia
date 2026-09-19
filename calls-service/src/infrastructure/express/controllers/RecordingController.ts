@@ -26,12 +26,16 @@ export const uploadMiddleware = multer({
 export class RecordingController {
   constructor(private callRepo: ICallRepository) {}
 
+  // Nota: esto graba solo el micrófono del agente en el navegador (no la voz del
+  // cliente, que viaja por el proveedor telefónico). Se guarda en un campo aparte
+  // para no pisar `recordingUrl`, que es la grabación real de ambas partes que
+  // envía el proveedor (Twilio/Vicidial) vía webhook.
   upload = async (req: Request, res: Response): Promise<void> => {
     if (!req.file) { res.status(400).json({ error: 'No file received' }); return; }
     const callId = req.params['callId'] as string;
-    const recordingUrl = `/api/calls/${callId}/recording`;
-    await this.callRepo.update(callId, { recordingUrl });
-    res.json({ ok: true, recordingUrl });
+    const agentRecordingUrl = `/api/calls/${callId}/recording`;
+    await this.callRepo.update(callId, { agentRecordingUrl });
+    res.json({ ok: true, agentRecordingUrl });
   };
 
   stream = async (req: Request, res: Response): Promise<void> => {

@@ -1,15 +1,16 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import callsReducer, { wsIncomingCall } from '../callsSlice';
+import callsReducer from '../callsSlice';
+import type { CallsState } from '../types';
 import IncomingCallToast from '../components/IncomingCallToast';
 
 vi.mock('@/api/axios', () => ({
   default: { post: vi.fn().mockResolvedValue({ data: {} }) },
 }));
 
-const makeStore = (incomingCall: any = null) =>
+const makeStore = (incomingCall: CallsState['incomingCall'] = null) =>
   configureStore({
     reducer: { calls: callsReducer },
     preloadedState: {
@@ -18,9 +19,9 @@ const makeStore = (incomingCall: any = null) =>
         queueEntries: [], predictiveStats: null,
         callHistory: [], total: 0, agendaEntries: [], reminders: [],
         loading: false, error: null, wsConnected: false,
-        agentStatus: 'offline', dialerOpen: false,
-      },
-    } as any,
+        agentStatus: 'offline', dialerOpen: false, demoActive: false,
+      } satisfies CallsState,
+    },
   });
 
 const incomingNotif = { callId: 'call-1', from: '+34600000099', to: '+34900000000', agentId: 'a1' };

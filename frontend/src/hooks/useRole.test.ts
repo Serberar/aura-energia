@@ -42,7 +42,7 @@ function makeStore(role: string | null) {
 function renderWithStore<T>(hook: () => T, role: string | null) {
   const store = makeStore(role);
   const wrapper = ({ children }: { children: React.ReactNode }) =>
-    React.createElement(Provider, { store }, children);
+    React.createElement(Provider, { store, children });
   return renderHook(hook, { wrapper });
 }
 

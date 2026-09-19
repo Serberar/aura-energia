@@ -20,6 +20,7 @@ import { HangUpCallUseCase } from '@application/use-cases/HangUpCallUseCase';
 import { CreateAgendaEntryUseCase } from '@application/use-cases/CreateAgendaEntryUseCase';
 import { UpdateAgendaEntryUseCase } from '@application/use-cases/UpdateAgendaEntryUseCase';
 import { UpdateAgentStatusUseCase } from '@application/use-cases/UpdateAgentStatusUseCase';
+import { InboundRoutingService } from '@application/services/InboundRoutingService';
 
 // Controllers & routes
 import { CallController } from '@infrastructure/express/controllers/CallController';
@@ -53,13 +54,19 @@ app.get('/health', (_req, res) => {
 const callRepo   = new CallPrismaRepository();
 const agendaRepo = new AgendaPrismaRepository();
 const wss        = new WebSocketServer();
+const inboundRouting = new InboundRoutingService(wss);
 
 const initiateUC   = new InitiateCallUseCase(callRepo, agendaRepo);
-const handleEventUC = new HandleCallEventUseCase(callRepo, wss);
-const hangUpUC     = new HangUpCallUseCase(callRepo, wss);
+const handleEventUC = new HandleCallEventUseCase(callRepo, wss, inboundRouting);
+const hangUpUC     = new HangUpCallUseCase(callRepo, wss, inboundRouting);
 const createAgenda = new CreateAgendaEntryUseCase(agendaRepo);
 const updateAgenda = new UpdateAgendaEntryUseCase(agendaRepo);
-const agentStatusUC = new UpdateAgentStatusUseCase(wss);
+const agentStatusUC = new UpdateAgentStatusUseCase(wss, inboundRouting);
+wss.onAgentFullyDisconnected((agentId) => {
+  agentStatusUC.execute(agentId, 'offline').catch((err) => {
+    console.error('[server] Error marcando agente offline tras desconexión:', err);
+  });
+});
 
 const callCtrl       = new CallController(initiateUC, hangUpUC, handleEventUC, callRepo, wss);
 const agendaCtrl     = new AgendaController(createAgenda, updateAgenda, agendaRepo);
@@ -70,7 +77,7 @@ const recordingCtrl    = new RecordingController(callRepo);
 const dncCtrl          = new DncController();
 const scriptCtrl       = new ScriptController();
 const dialerCtrl       = new DialerController();
-const inboundCtrl      = new InboundController(wss);
+const inboundCtrl      = new InboundController(wss, inboundRouting);
 const predictiveCtrl   = new PredictiveController(wss);
 const campaignCtrl     = new CampaignController(wss);
 

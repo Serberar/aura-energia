@@ -351,6 +351,13 @@
   padding: 0.25rem 0;
 }
 
+.statusSince {
+  font-size: 0.7rem;
+  color: var(--text-muted, #9ca3af);
+  padding: 0 0.75rem 0.25rem;
+  margin-top: -0.25rem;
+}
+
 /* ── Header meta (last refresh + WS indicator) ─────────────── */
 .headerMeta {
   display: flex;

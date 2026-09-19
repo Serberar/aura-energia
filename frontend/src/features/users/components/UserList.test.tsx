@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithStore } from '@/test-utils/renderWithStore';
 import type { UserData } from '../services/userService';
@@ -36,10 +36,12 @@ vi.mock('../usersSlice', async () => {
 import UserList from './UserList';
 
 const mockAdmin: UserData = {
-  id: 'user-1', firstName: 'Carlos', lastName: 'Admin', email: 'carlos@example.com', role: 'administrador', active: true,
+  id: 'user-1', username: 'carlos', firstName: 'Carlos', lastName: 'Admin', role: 'administrador',
+  active: true, failedLoginAttempts: 0, createdAt: '2024-01-01T00:00:00Z', lastLoginAt: null,
 };
 const mockComercial: UserData = {
-  id: 'user-2', firstName: 'Ana', lastName: 'López', email: 'ana@example.com', role: 'comercial', active: true,
+  id: 'user-2', username: 'ana', firstName: 'Ana', lastName: 'López', role: 'comercial',
+  active: true, failedLoginAttempts: 0, createdAt: '2024-01-01T00:00:00Z', lastLoginAt: null,
 };
 
 describe('UserList', () => {

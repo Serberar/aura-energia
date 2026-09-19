@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   listDispositionCodes,
   createDispositionCode,
@@ -18,6 +18,7 @@ export default function DispositionsPage() {
   const [loading, setLoading] = useState(true);
   const [label, setLabel]     = useState('');
   const [color, setColor]     = useState('#6b7280');
+  const [marksSaleClosed, setMarksSaleClosed] = useState(false);
   const [saving, setSaving]   = useState(false);
   const [error, setError]     = useState<string | null>(null);
 
@@ -32,10 +33,11 @@ export default function DispositionsPage() {
     if (!label.trim()) return;
     setSaving(true); setError(null);
     try {
-      const code = await createDispositionCode({ label: label.trim(), color });
+      const code = await createDispositionCode({ label: label.trim(), color, marksSaleClosed });
       setCodes((prev) => [...prev, code]);
       setLabel('');
       setColor('#6b7280');
+      setMarksSaleClosed(false);
     } catch {
       setError('Error al crear la codificación');
     } finally {
@@ -87,6 +89,10 @@ export default function DispositionsPage() {
             {saving ? 'Añadiendo…' : '+ Añadir'}
           </button>
         </div>
+        <label className={s.checkRow}>
+          <input type="checkbox" checked={marksSaleClosed} onChange={(e) => setMarksSaleClosed(e.target.checked)} />
+          Al seleccionarla, llevar al agente a registrar la venta en el CRM
+        </label>
       </div>
 
       {/* Lista */}
@@ -102,6 +108,7 @@ export default function DispositionsPage() {
                 <span className={s.dot} style={{ background: code.color }} />
                 <span className={s.itemLabel}>{code.label}</span>
                 {code.isDefault && <span className={s.defaultBadge}>Por defecto</span>}
+                {code.marksSaleClosed && <span className={s.defaultBadge}>→ Crea venta</span>}
                 <button
                   className={s.deleteBtn}
                   onClick={() => handleDelete(code.id)}

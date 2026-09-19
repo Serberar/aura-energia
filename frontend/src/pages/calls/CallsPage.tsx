@@ -1,8 +1,8 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks';
 import { fetchCallHistory, updateAgentStatus, openDialer } from '@/features/calls/callsSlice';
-import { buildExportUrl } from '@/features/calls/services/callService';
-import type { AgentStatus, CallStatus } from '@/features/calls/types';
+import { buildExportUrl, getMyPauseLogs } from '@/features/calls/services/callService';
+import type { AgentStatus, CallStatus, PauseLog } from '@/features/calls/types';
 import AgendaPanel from '@/features/calls/components/AgendaPanel';
 import styles from './CallsPage.module.scss';
 
@@ -67,7 +67,19 @@ const PAUSE_REASONS: { value: string; label: string }[] = [
 ];
 
 const PAGE_SIZE = 20;
-type Tab = 'history' | 'agenda';
+type Tab = 'history' | 'agenda' | 'pauses';
+
+const PAUSE_REASON_LABELS: Record<string, string> = {
+  break: 'Descanso', lunch: 'Almuerzo', admin: 'Gestión administrativa',
+  training: 'Formación', personal: 'Personal',
+};
+
+function fmtPauseSecs(secs: number | null): string {
+  if (secs == null) return 'en curso';
+  const m = Math.floor(secs / 60);
+  const s = secs % 60;
+  return m > 0 ? `${m}m ${s}s` : `${s}s`;
+}
 
 export default function CallsPage() {
   const dispatch    = useAppDispatch();
@@ -78,6 +90,7 @@ export default function CallsPage() {
   const wsConnected = useAppSelector((s) => s.calls.wsConnected);
   const [tab, setTab]             = useState<Tab>('history');
   const [pauseModal, setPauseModal] = useState(false);
+  const [myPauses, setMyPauses]   = useState<PauseLog[]>([]);
   const [page, setPage]     = useState(1);
   const [from, setFrom]     = useState('');
   const [to, setTo]         = useState('');
@@ -99,6 +112,10 @@ export default function CallsPage() {
   }, [dispatch, page, from, to, phone, status]);
 
   useEffect(() => { load(); }, [load]);
+
+  useEffect(() => {
+    if (tab === 'pauses') getMyPauseLogs().then(setMyPauses).catch(() => setMyPauses([]));
+  }, [tab]);
 
   const handleApply = () => { setPage(1); load(); };
   const handleClear = () => { setFrom(''); setTo(''); setPhone(''); setStatus(''); setPage(1); };
@@ -140,9 +157,9 @@ export default function CallsPage() {
 
       {/* Tabs */}
       <div className={styles.tabs}>
-        {(['history', 'agenda'] as Tab[]).map((t) => (
+        {(['history', 'agenda', 'pauses'] as Tab[]).map((t) => (
           <button key={t} className={`${styles.tab} ${tab === t ? styles.tabActive : ''}`} onClick={() => setTab(t)}>
-            {t === 'history' ? '📋 Historial' : '📅 Agenda'}
+            {t === 'history' ? '📋 Historial' : t === 'agenda' ? '📅 Agenda' : '⏸ Mis pausas'}
           </button>
         ))}
       </div>
@@ -152,6 +169,39 @@ export default function CallsPage() {
           <div className={styles.cardTitle}>Agenda de llamadas</div>
           <div style={{ padding: '16px 20px' }}>
             <AgendaPanel />
+          </div>
+        </div>
+      )}
+
+      {tab === 'pauses' && (
+        <div className={styles.card}>
+          <div className={styles.cardTitle}>
+            Mis pausas de hoy
+            {myPauses.length > 0 && (
+              <span className={styles.totalBadge}>
+                {fmtPauseSecs(myPauses.reduce((acc, p) => acc + (p.duration ?? 0), 0))} total
+              </span>
+            )}
+          </div>
+          <div style={{ padding: '16px 20px' }}>
+            {myPauses.length === 0 ? (
+              <p style={{ color: '#94a3b8', fontSize: 14 }}>Aún no has hecho ninguna pausa hoy.</p>
+            ) : (
+              <table className={styles.table}>
+                <thead>
+                  <tr><th>Motivo</th><th>Inicio</th><th>Duración</th></tr>
+                </thead>
+                <tbody>
+                  {myPauses.map((p) => (
+                    <tr key={p.id}>
+                      <td>{PAUSE_REASON_LABELS[p.reason] ?? p.reason}</td>
+                      <td>{new Date(p.startedAt).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}</td>
+                      <td>{fmtPauseSecs(p.duration)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
       )}
@@ -244,7 +294,11 @@ export default function CallsPage() {
                         </td>
                         <td>
                           {call.recordingUrl ? (
-                            <audio controls src={call.recordingUrl} style={{ height: 28 }} />
+                            <audio controls src={call.recordingUrl} style={{ height: 28 }} title="Grabación completa (proveedor)" />
+                          ) : call.agentRecordingUrl ? (
+                            <span title="Solo se capturó el audio del agente, no el del cliente">
+                              <audio controls src={call.agentRecordingUrl} style={{ height: 28 }} /> ⚠️ solo agente
+                            </span>
                           ) : '—'}
                         </td>
                         <td>

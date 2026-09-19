@@ -55,7 +55,7 @@ function makeStore() {
 
 function makeWrapper(store: ReturnType<typeof makeStore>) {
   return ({ children }: { children: React.ReactNode }) =>
-    React.createElement(Provider, { store }, children);
+    React.createElement(Provider, { store, children });
 }
 
 describe('useSaleItems', () => {
@@ -81,7 +81,7 @@ describe('useSaleItems', () => {
       let returned: any;
       await act(async () => {
         returned = await result.current.addItem({
-          name: 'Seguro', quantity: 1, unitPrice: 100, productId: 'prod-1',
+          name: 'Seguro', quantity: 1, price: 100, productId: 'prod-1',
         });
       });
 
@@ -96,7 +96,7 @@ describe('useSaleItems', () => {
       let threw = false;
       await act(async () => {
         try {
-          await result.current.addItem({ name: 'X', quantity: 1, unitPrice: 10, productId: 'x' });
+          await result.current.addItem({ name: 'X', quantity: 1, price: 10, productId: 'x' });
         } catch { threw = true; }
       });
 

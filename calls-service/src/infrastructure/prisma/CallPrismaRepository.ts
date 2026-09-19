@@ -71,12 +71,31 @@ export class CallPrismaRepository implements ICallRepository {
     return result;
   }
 
-  async setAgentActiveCall(agentId: string, callId: string | null): Promise<void> {
+  async setAgentActiveCall(agentId: string, callId: string | null): Promise<boolean> {
+    if (callId === null) {
+      // Ending a call: free the reservation. Only flip status back to
+      // 'available' if it was 'busy' because of this call — an agent who
+      // has since gone to paused/offline should stay that way.
+      const result = await prisma.agentSession.updateMany({
+        where: { agentId, status: 'busy' },
+        data:  { activeCallId: null, status: 'available' },
+      });
+      if (result.count === 0) {
+        await prisma.agentSession.upsert({
+          where:  { agentId },
+          update: { activeCallId: null },
+          create: { agentId, activeCallId: null },
+        });
+        return false;
+      }
+      return true;
+    }
     await prisma.agentSession.upsert({
       where:  { agentId },
       update: { activeCallId: callId },
       create: { agentId, activeCallId: callId },
     });
+    return false;
   }
 
   async addEvent(callId: string, event: string, payload?: unknown): Promise<void> {

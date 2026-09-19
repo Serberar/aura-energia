@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { listScripts, createScript, updateScript, deleteScript } from '@/features/calls/services/scriptService';
 import type { CallScript } from '@/features/calls/services/scriptService';
 import s from './ScriptsPage.module.scss';

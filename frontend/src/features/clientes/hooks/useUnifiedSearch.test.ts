@@ -32,7 +32,7 @@ import * as clientServiceMod from '@/features/clientes/services/clientService';
 import * as skoreSliceMod from '@/features/1skore/skoreSlice';
 
 const mockClientServiceSearch = (clientServiceMod as any).clientService.searchClient as ReturnType<typeof vi.fn>;
-const mockDoSearch1Skore = skoreSliceMod.doSearch1Skore as ReturnType<typeof vi.fn>;
+const mockDoSearch1Skore = skoreSliceMod.doSearch1Skore as unknown as ReturnType<typeof vi.fn>;
 
 const mockClient = {
   id: 'client-1', firstName: 'María', lastName: 'González', dni: '12345678A',
@@ -72,7 +72,7 @@ function makeStore() {
 
 function makeWrapper(store: ReturnType<typeof makeStore>) {
   return ({ children }: { children: React.ReactNode }) =>
-    React.createElement(Provider, { store }, children);
+    React.createElement(Provider, { store, children });
 }
 
 describe('useUnifiedSearch', () => {

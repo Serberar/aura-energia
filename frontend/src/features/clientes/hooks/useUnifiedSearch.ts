@@ -2,7 +2,7 @@ import { useState, useRef, useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks/reduxHooks';
 import { clientService } from '../../../features/clientes/services/clientService';
 import { doSearch1Skore } from '../../../features/1skore/skoreSlice';
-import type { Client } from '../../../types';
+import type { Client, SkoreSearchResponse } from '../../../types';
 import {
   calculateClientCompleteness,
   deduplicateCrmClients,
@@ -112,7 +112,7 @@ export const useUnifiedSearch = () => {
       if (signal.aborted) return;
 
       // Ejecutar búsquedas según configuración
-      const searches: [Promise<Client[] | Client>, Promise<unknown>] = [
+      const searches: [Promise<Client[] | Client>, Promise<SkoreSearchResponse>] = [
         clientService.searchClient(searchTerm, signal),
         crmOnlineSearchEnabled
           ? dispatch(doSearch1Skore(searchTerm)).unwrap()

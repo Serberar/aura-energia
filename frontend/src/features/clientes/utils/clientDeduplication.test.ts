@@ -20,9 +20,9 @@ const baseClient: Client = {
   addresses: [],
   bankAccounts: [],
   comments: [],
-  birthday: null,
+  birthday: undefined,
   businessName: undefined,
-  authorized: false,
+  authorized: undefined,
   createdAt: '2024-01-01T00:00:00Z',
   updatedAt: '2024-01-01T00:00:00Z',
 };
@@ -31,7 +31,7 @@ const baseClient: Client = {
 
 describe('calculateClientCompleteness', () => {
   it('returns 0 for empty client', () => {
-    const empty = { ...baseClient, firstName: '', lastName: '', dni: '', email: '', phones: [], addresses: [], bankAccounts: [], comments: [], birthday: null, businessName: undefined, authorized: false };
+    const empty = { ...baseClient, firstName: '', lastName: '', dni: '', email: '', phones: [], addresses: [], bankAccounts: [], comments: [], birthday: undefined, businessName: undefined, authorized: undefined };
     expect(calculateClientCompleteness(empty)).toBe(0);
   });
 
@@ -49,7 +49,7 @@ describe('calculateClientCompleteness', () => {
   });
 
   it('adds 1 for authorized=true', () => {
-    const withAuth = { ...baseClient, authorized: true };
+    const withAuth = { ...baseClient, authorized: 'Sí' };
     expect(calculateClientCompleteness(withAuth)).toBeGreaterThan(calculateClientCompleteness(baseClient));
   });
 

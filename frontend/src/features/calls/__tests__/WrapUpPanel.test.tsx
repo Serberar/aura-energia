@@ -1,23 +1,19 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit';
 import callsReducer from '../callsSlice';
 import WrapUpPanel from '../components/WrapUpPanel';
-import type { Call } from '../types';
+import type { Call, CallsState } from '../types';
 
 vi.mock('../services/dispositionService', () => ({
   listDispositionCodes: vi.fn().mockResolvedValue([
-    { id: 'd1', label: 'Interesado', color: '#16a34a', isDefault: true, order: 0, active: true },
-    { id: 'd2', label: 'No interesado', color: '#dc2626', isDefault: false, order: 1, active: true },
+    { id: 'd1', label: 'Interesado', color: '#16a34a', isDefault: true, marksSaleClosed: false, order: 0, active: true },
+    { id: 'd2', label: 'No interesado', color: '#dc2626', isDefault: false, marksSaleClosed: false, order: 1, active: true },
   ]),
   submitWrapUp: vi.fn().mockResolvedValue({}),
 }));
-
-vi.mock('../callsSlice', async (importOriginal) => {
-  const actual = await importOriginal() as any;
-  return { ...actual, submitWrapUp: vi.fn(() => ({ type: 'mock/submitWrapUp', payload: {} })) };
-});
 
 const makeCall = (overrides: Partial<Call> = {}): Call => ({
   id: 'call-1', agentId: 'agent-1', clientPhone: '+34600000001',
@@ -35,14 +31,14 @@ const makeStore = (pendingWrapUp: Call | null = null) =>
         queueEntries: [], predictiveStats: null,
         callHistory: [], total: 0, agendaEntries: [], reminders: [],
         loading: false, error: null, wsConnected: false,
-        agentStatus: 'offline', dialerOpen: false,
-      },
-    } as any,
+        agentStatus: 'offline', dialerOpen: false, demoActive: false,
+      } satisfies CallsState,
+    },
   });
 
 const renderPanel = (call: Call | null = null) => {
   const store = makeStore(call);
-  return { store, ...render(<Provider store={store}><WrapUpPanel /></Provider>) };
+  return { store, ...render(<Provider store={store}><MemoryRouter><WrapUpPanel /></MemoryRouter></Provider>) };
 };
 
 describe('WrapUpPanel', () => {

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks';
-import { submitWrapUp, clearWrapUp } from '../callsSlice';
+import { submitWrapUp, clearWrapUp, clearError } from '../callsSlice';
 import { listDispositionCodes } from '../services/dispositionService';
 import { searchClient } from '@/features/clientes/services/clientService';
 import crmApi from '@/api/crmApi';
@@ -8,6 +9,7 @@ import type { DispositionCode } from '../types';
 import styles from './WrapUpPanel.module.scss';
 
 const WRAP_UP_TIMEOUT_SECS = 120;
+const MAX_EXTEND_SECS = 300;
 
 function formatDuration(secs: number | null | undefined): string {
   if (!secs) return '—';
@@ -18,7 +20,9 @@ function formatDuration(secs: number | null | undefined): string {
 
 export default function WrapUpPanel() {
   const dispatch    = useAppDispatch();
+  const navigate    = useNavigate();
   const call        = useAppSelector((s) => s.calls.pendingWrapUp);
+  const error       = useAppSelector((s) => s.calls.error);
   const [codes, setCodes]             = useState<DispositionCode[]>([]);
   const [selectedId, setSelectedId]   = useState<string>('');
   const [notes, setNotes]             = useState('');
@@ -32,6 +36,7 @@ export default function WrapUpPanel() {
     setRemaining(WRAP_UP_TIMEOUT_SECS);
     setSelectedId('');
     setNotes('');
+    dispatch(clearError());
 
     listDispositionCodes()
       .then((list) => {
@@ -68,17 +73,35 @@ export default function WrapUpPanel() {
 
   function handleSubmit(auto = false) {
     if (!call) return;
-    const dispLabel = codes.find((c) => c.id === selectedId)?.label ?? '';
+    const selectedCode = codes.find((c) => c.id === selectedId);
+    const dispLabel = selectedCode?.label ?? '';
+    const clientPhone = call.clientPhone;
+    const marksSaleClosed = selectedCode?.marksSaleClosed ?? false;
+
     dispatch(submitWrapUp({
       callId:            call.id,
       dispositionCodeId: selectedId || undefined,
       agentNotes:        notes || undefined,
       wrapUpStartedAt:   startedAtRef.current,
-    }));
+    }))
+      .unwrap()
+      .then(() => {
+        // La codificación marca la venta como cerrada: llevamos al agente
+        // directamente a registrarla en el CRM en vez de dejar que se pierda.
+        if (marksSaleClosed) {
+          navigate(`/sales/create?phone=${encodeURIComponent(clientPhone)}`);
+        }
+      })
+      .catch(() => {});
+
     if (auto) dispatch(clearWrapUp());
 
     // Push comment to CRM (fire-and-forget) ─ won't block the UI
     pushCallCommentToCrm(call.clientPhone, call.clientId ?? null, dispLabel, notes, duration);
+  }
+
+  function handleExtend() {
+    setRemaining((prev) => Math.min(prev + 30, MAX_EXTEND_SECS));
   }
 
   // Resolves the CRM client and appends a call summary comment
@@ -112,8 +135,15 @@ export default function WrapUpPanel() {
         {/* Header */}
         <div className={styles.header}>
           <span className={styles.title}>Cierre de llamada</span>
-          <span className={styles.countdown} style={{ color: timerColor }}>
-            {remaining}s
+          <span className={styles.countdownGroup}>
+            <span className={styles.countdown} style={{ color: timerColor }}>
+              {remaining}s
+            </span>
+            {remaining < MAX_EXTEND_SECS && (
+              <button className={styles.extendBtn} onClick={handleExtend} title="Añadir 30 segundos">
+                +30s
+              </button>
+            )}
           </span>
         </div>
 
@@ -162,6 +192,8 @@ export default function WrapUpPanel() {
             rows={3}
           />
         </div>
+
+        {error && <div className={styles.errorMsg}>{error}</div>}
 
         {/* Actions */}
         <div className={styles.actions}>

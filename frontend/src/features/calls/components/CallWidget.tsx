@@ -55,12 +55,22 @@ function useCallTimer(answeredAt?: string | null): string {
   return `${m}:${s}`;
 }
 
+const COMPANY_NAME = import.meta.env.VITE_COMPANY_NAME ?? 'nuestra empresa';
+
+function fillScriptPlaceholders(content: string, clientName: string | null, agentName: string): string {
+  return content
+    .replace(/\[NOMBRE\]/gi, clientName || 'el cliente')
+    .replace(/\[AGENTE\]/gi, agentName || 'el agente')
+    .replace(/\[EMPRESA\]/gi, COMPANY_NAME);
+}
+
 export default function CallWidget() {
   const dispatch     = useAppDispatch();
   const activeCall   = useAppSelector((s) => s.calls.activeCall);
   const dialerOpen   = useAppSelector((s) => s.calls.dialerOpen);
   const wsConnected  = useAppSelector((s) => s.calls.wsConnected);
   const loading      = useAppSelector((s) => s.calls.loading);
+  const agentFirstName = useAppSelector((s) => s.auth.user?.firstName ?? '');
   const [phone, setPhone]       = useState('');
   const [notes, setNotes]       = useState('');
   const [notesSaved, setNotesSaved] = useState(false);
@@ -257,7 +267,15 @@ export default function CallWidget() {
                   ))}
                 </div>
               )}
-              <pre className={styles.scriptContent}>{scripts[scriptIdx]?.content}</pre>
+              <pre className={styles.scriptContent}>
+                {scripts[scriptIdx]
+                  ? fillScriptPlaceholders(
+                      scripts[scriptIdx].content,
+                      clientInfo ? `${clientInfo.firstName} ${clientInfo.lastName}`.trim() : null,
+                      agentFirstName,
+                    )
+                  : ''}
+              </pre>
             </div>
           )}
 

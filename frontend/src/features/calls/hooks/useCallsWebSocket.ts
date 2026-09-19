@@ -41,6 +41,9 @@ export function useCallsWebSocket() {
           entry?:   Partial<AgendaEntry>;
           agentId?: string;
           status?:  string;
+          agentName?: string | null;
+          pauseReason?: string | null;
+          updatedAt?: string;
         };
 
         // Route all messages through the bus so monitor hooks can react
@@ -63,7 +66,13 @@ export function useCallsWebSocket() {
         }
 
         if (msg.type === 'agent:status-changed' && msg.agentId && msg.status) {
-          dispatch(wsAgentStatusChanged({ agentId: msg.agentId, status: msg.status }));
+          dispatch(wsAgentStatusChanged({
+            agentId: msg.agentId,
+            status: msg.status,
+            agentName: msg.agentName ?? undefined,
+            pauseReason: msg.pauseReason ?? null,
+            updatedAt: msg.updatedAt,
+          }));
           return;
         }
 

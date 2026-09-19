@@ -63,6 +63,7 @@ model Call {
 
   duration       Int?
   recordingUrl   String?
+  agentRecordingUrl String?
   disposition    String?
   muted          Boolean   @default(false)
   onHold         Boolean   @default(false)
@@ -177,6 +178,7 @@ model DispositionCode {
   label     String
   color     String  @default("#6b7280")
   isDefault Boolean @default(false)
+  marksSaleClosed Boolean @default(false)
   order     Int     @default(0)
   active    Boolean @default(true)
 

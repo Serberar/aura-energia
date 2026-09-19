@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { listDnc, addDnc, removeDnc } from '@/features/calls/services/dncService';
 import type { DncEntry } from '@/features/calls/services/dncService';
 import s from './DncPage.module.scss';

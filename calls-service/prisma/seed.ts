@@ -66,7 +66,7 @@ async function main() {
   // ── Disposition codes ───────────────────────────────────────────────────────
   const CODES = [
     { id: 'seed-0', label: 'Interesado',           color: '#22c55e', isDefault: false, order: 0 },
-    { id: 'seed-1', label: 'Venta cerrada',         color: '#16a34a', isDefault: false, order: 1 },
+    { id: 'seed-1', label: 'Venta cerrada',         color: '#16a34a', isDefault: false, marksSaleClosed: true, order: 1 },
     { id: 'seed-2', label: 'No interesado',         color: '#ef4444', isDefault: false, order: 2 },
     { id: 'seed-3', label: 'Devolverá llamada',     color: '#3b82f6', isDefault: false, order: 3 },
     { id: 'seed-4', label: 'No disponible',         color: '#f59e0b', isDefault: false, order: 4 },
@@ -77,7 +77,8 @@ async function main() {
     { id: 'seed-9', label: 'Número de empresa',     color: '#a855f7', isDefault: false, order: 9 },
   ];
   for (const c of CODES) {
-    await prisma.dispositionCode.upsert({ where: { id: c.id }, update: {}, create: c });
+    const { id, ...rest } = c;
+    await prisma.dispositionCode.upsert({ where: { id }, update: rest, create: c });
   }
   console.log('[seed] Disposition codes OK');
 
@@ -153,13 +154,15 @@ CIERRE
   });
   const demoCount = await prisma.dialListEntry.count({ where: { listId: DEMO_LIST_ID } });
   if (demoCount === 0) {
+    // Teléfonos idénticos a los primeros clientes reales sembrados en crm-service
+    // (misma fórmula makePhone) para que la ficha de cliente aparezca en la llamada demo.
     await prisma.dialListEntry.createMany({
       data: [
-        { listId: DEMO_LIST_ID, phone: '+34600111222', clientName: 'María García Pérez',      notes: 'Interesada el mes pasado. Pedir referencia.' },
-        { listId: DEMO_LIST_ID, phone: '+34611333444', clientName: 'Carlos López Martínez',   notes: 'Prefiere llamadas por la tarde.'             },
-        { listId: DEMO_LIST_ID, phone: '+34622555666', clientName: 'Ana Martínez Sánchez',    notes: null                                          },
-        { listId: DEMO_LIST_ID, phone: '+34633777888', clientName: 'Pedro Sánchez Torres',    notes: 'No disponible en intentos anteriores.'       },
-        { listId: DEMO_LIST_ID, phone: '+34644999000', clientName: 'Laura Fernández Cruz',    notes: 'Referida por García. Alta prioridad.'        },
+        { listId: DEMO_LIST_ID, phone: '610100000', clientName: 'Álvaro García Fernández', notes: 'Interesado el mes pasado. Pedir referencia.' },
+        { listId: DEMO_LIST_ID, phone: '610100131', clientName: 'Beatriz López Ramírez',   notes: 'Prefiere llamadas por la tarde.'             },
+        { listId: DEMO_LIST_ID, phone: '610100262', clientName: 'Daniel Martínez Torres',  notes: null                                          },
+        { listId: DEMO_LIST_ID, phone: '610100393', clientName: 'Diana Sánchez Flores',    notes: 'No disponible en intentos anteriores.'       },
+        { listId: DEMO_LIST_ID, phone: '610100524', clientName: 'Fernando Pérez Díaz',     notes: 'Referido por García. Alta prioridad.'        },
       ],
     });
     console.log('[seed] Lista Demo: 5 entries');

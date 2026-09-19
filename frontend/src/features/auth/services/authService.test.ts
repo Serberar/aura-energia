@@ -10,7 +10,7 @@ vi.mock('../../../api/axios', () => ({
 import api from '../../../api/axios';
 import { loginAPI, refreshAPI, logoutUser } from './authService';
 
-const mockApi = api as { post: ReturnType<typeof vi.fn> };
+const mockApi = api as unknown as { post: ReturnType<typeof vi.fn> };
 
 // Backing store for localStorage mock
 const store = new Map<string, string>();

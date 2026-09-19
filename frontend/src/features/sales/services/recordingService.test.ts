@@ -26,7 +26,7 @@ const mockRecording: Recording = {
   id: 'rec-1',
   saleId: 'sale-1',
   filename: 'test-uuid.mp3',
-  originalName: 'grabacion.mp3',
+  storagePath: '/recordings/test-uuid.mp3',
   mimeType: 'audio/mpeg',
   size: 1024000,
   uploadedById: 'user-1',

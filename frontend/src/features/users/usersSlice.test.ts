@@ -309,7 +309,7 @@ describe('updateUser', () => {
     await store.dispatch(updateUser({ userId: 'user-2', data: { firstName: 'Juan Carlos' } }));
 
     const { users } = store.getState().users;
-    expect(users.find((u) => u.id === 'user-2')?.firstName).toBe('Juan Carlos');
+    expect(users.find((u: UserData) => u.id === 'user-2')?.firstName).toBe('Juan Carlos');
   });
 
   it('updates selectedUser when updated user was selected', async () => {

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import type { CallsState, Call, AgentStatus, AgendaEntry, ReminderNotification, IncomingCallNotification, QueueEntry, PredictiveStats } from './types';
+import type { CallsState, Call, AgentStatus, ReminderNotification, IncomingCallNotification, QueueEntry, PredictiveStats } from './types';
 import * as callService from './services/callService';
 import * as agendaService from './services/agendaService';
 import * as dispositionService from './services/dispositionService';
@@ -239,6 +239,9 @@ const callsSlice = createSlice({
     wsQueueRemoved(state, action: PayloadAction<string>) {
       state.queueEntries = state.queueEntries.filter((q) => q.callId !== action.payload);
     },
+    setQueueEntries(state, action: PayloadAction<QueueEntry[]>) {
+      state.queueEntries = action.payload;
+    },
     wsPredictiveStats(state, action: PayloadAction<PredictiveStats>) {
       state.predictiveStats = action.payload;
     },
@@ -299,6 +302,9 @@ const callsSlice = createSlice({
       })
       .addCase(submitWrapUp.fulfilled, (state) => {
         state.pendingWrapUp = null;
+      })
+      .addCase(submitWrapUp.rejected, (state, action) => {
+        state.error = action.payload as string;
       });
   },
 });
@@ -308,7 +314,7 @@ export const {
   setWsConnected, openDialer, closeDialer, clearError,
   wsReminderReceived, dismissReminder,
   optimisticMute, optimisticHold, clearWrapUp,
-  wsIncomingCall, dismissIncomingCall, wsQueueChanged, wsQueueRemoved, wsPredictiveStats,
+  wsIncomingCall, dismissIncomingCall, wsQueueChanged, wsQueueRemoved, setQueueEntries, wsPredictiveStats,
   demoSetActiveCall, demoEnd,
 } = callsSlice.actions;
 

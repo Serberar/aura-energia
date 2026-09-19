@@ -1,5 +1,5 @@
 import callsApi from './callsApi';
-import type { AgentSession } from '../types';
+import type { AgentSession, PauseLog } from '../types';
 
 export interface SupervisorStats {
   today: {
@@ -69,6 +69,7 @@ export interface AgentCallDetail {
   wrapUpStartedAt:  string | null;
   wrapUpEndedAt:    string | null;
   recordingUrl:     string | null;
+  agentRecordingUrl: string | null;
   createdAt:        string;
   dispositionCode?: { label: string; color: string } | null;
 }
@@ -80,6 +81,9 @@ export const getAgentCalls = (
   callsApi
     .get<{ data: AgentCallDetail[]; total: number }>(`/supervisor/agents/${agentId}/calls`, { params })
     .then((r) => r.data);
+
+export const getAgentPauseLogs = (agentId: string): Promise<PauseLog[]> =>
+  callsApi.get<PauseLog[]>(`/agents/${agentId}/pauses`).then((r) => r.data);
 
 export const getHistoricalStats = (
   from: string,

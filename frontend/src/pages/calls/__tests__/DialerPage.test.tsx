@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { MemoryRouter } from 'react-router-dom';
 import callsReducer from '@/features/calls/callsSlice';
+import type { CallsState } from '@/features/calls/types';
 import DialerPage from '../DialerPage';
 
 // ── Mocks ────────────────────────────────────────────────────────────────────
@@ -35,9 +36,9 @@ const makeStore = () =>
         activeCall: null, pendingWrapUp: null, incomingCall: null,
         queueEntries: [], predictiveStats: null, callHistory: [],
         total: 0, agendaEntries: [], reminders: [], loading: false,
-        error: null, wsConnected: false, agentStatus: 'available', dialerOpen: false,
-      },
-    } as any,
+        error: null, wsConnected: false, agentStatus: 'available', dialerOpen: false, demoActive: false,
+      } satisfies CallsState,
+    },
   });
 
 const renderPage = () =>
@@ -104,7 +105,7 @@ describe('DialerPage — vista activa', () => {
   beforeEach(() => vi.clearAllMocks());
 
   const openActiveView = async () => {
-    const { listDialLists, updateDialList } = await import('@/features/calls/services/dialerService');
+    const { listDialLists } = await import('@/features/calls/services/dialerService');
     (listDialLists as any).mockResolvedValue([makeList({ status: 'active' })]);
     renderPage();
     fireEvent.click(await screen.findByRole('button', { name: /abrir/i }));

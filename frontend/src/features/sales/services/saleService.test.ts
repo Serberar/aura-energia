@@ -170,7 +170,7 @@ describe('saleService', () => {
       mockApi.post.mockResolvedValue({ data: { sale: mockSale } });
 
       const result = await addSaleItem('sale-1', {
-        name: 'Seguro', quantity: 1, unitPrice: 100, productId: 'prod-1',
+        name: 'Seguro', quantity: 1, price: 100, productId: 'prod-1',
       });
 
       expect(mockApi.post).toHaveBeenCalledWith(
@@ -183,7 +183,7 @@ describe('saleService', () => {
     it('throws when API fails', async () => {
       mockApi.post.mockRejectedValue(new Error('Product not found'));
       await expect(
-        addSaleItem('sale-1', { name: 'X', quantity: 1, unitPrice: 10, productId: 'x' })
+        addSaleItem('sale-1', { name: 'X', quantity: 1, price: 10, productId: 'x' })
       ).rejects.toThrow('Product not found');
     });
   });

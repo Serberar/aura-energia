@@ -1,9 +1,10 @@
-import { useEffect, useCallback, useState, useRef } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks';
 import { fetchSupervisorData, fetchHistoricalStats } from '@/features/calls/supervisorSlice';
+import { setQueueEntries } from '@/features/calls/callsSlice';
 import { useMonitorReceiver } from '@/features/calls/hooks/useMonitorReceiver';
+import { getInboundQueue } from '@/features/calls/services/callService';
 import AgentCallsDrawer from '@/features/calls/components/AgentCallsDrawer';
-import type { HistoricalStats } from '@/features/calls/services/supervisorService';
 import styles from './SupervisorPage.module.scss';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -21,6 +22,20 @@ const STATUS_COLORS: Record<string, string> = {
   paused:    '#8b5cf6',
   offline:   '#6b7280',
 };
+
+const PAUSE_REASON_LABELS: Record<string, string> = {
+  break: 'Descanso', lunch: 'Almuerzo', admin: 'Gestión administrativa',
+  training: 'Formación', personal: 'Personal',
+};
+
+function timeSince(iso: string): string {
+  const secs = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+  if (secs < 60) return `${secs}s`;
+  const m = Math.floor(secs / 60);
+  if (m < 60) return `${m}m`;
+  const h = Math.floor(m / 60);
+  return `${h}h ${m % 60}m`;
+}
 
 function useTicker(intervalMs = 1000) {
   const [, setTick] = useState(0);
@@ -65,13 +80,11 @@ function BarChart({
   labelKey,
   valueKey,
   color = '#3b82f6',
-  maxLabel,
 }: {
   data:     Record<string, unknown>[];
   labelKey: string;
   valueKey: string;
   color?:   string;
-  maxLabel?: string;
 }) {
   const max = Math.max(...data.map((d) => Number(d[valueKey]) || 0), 1);
   return (
@@ -291,6 +304,7 @@ export default function SupervisorPage() {
   const { stats, activeCalls, agents, loading, error, lastRefresh } =
     useAppSelector((s) => s.supervisor);
   const wsConnected  = useAppSelector((s) => s.calls.wsConnected);
+  const queueEntries = useAppSelector((s) => s.calls.queueEntries);
 
   const { statuses, startListening, stopListening } = useMonitorReceiver();
 
@@ -308,6 +322,11 @@ export default function SupervisorPage() {
     const interval = setInterval(refresh, 30_000);
     return () => clearInterval(interval);
   }, [refresh]);
+
+  // Carga inicial de la cola de entrantes (las actualizaciones en vivo llegan por WS)
+  useEffect(() => {
+    getInboundQueue().then((q) => dispatch(setQueueEntries(q))).catch(() => {});
+  }, [dispatch]);
 
   // Mapa agentId → nombre para el ranking histórico
   const agentNames = new Map(
@@ -353,6 +372,34 @@ export default function SupervisorPage() {
             accent="#6366f1"
             sub={`${stats.agents.available} disp · ${stats.agents.busy} en llamada · ${stats.agents.paused} pausa`}
           />
+        </section>
+      )}
+
+      {/* ── Cola de llamadas entrantes ── */}
+      {queueEntries.length > 0 && (
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>
+            En cola de espera
+            <span className={styles.badge}>{queueEntries.length}</span>
+          </h2>
+          <div className={styles.tableWrap}>
+            <table className={styles.table}>
+              <thead>
+                <tr><th>Posición</th><th>Número</th></tr>
+              </thead>
+              <tbody>
+                {queueEntries
+                  .slice()
+                  .sort((a, b) => a.position - b.position)
+                  .map((q) => (
+                    <tr key={q.callId}>
+                      <td>{q.position}</td>
+                      <td>{q.fromPhone}</td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
         </section>
       )}
 
@@ -475,6 +522,11 @@ export default function SupervisorPage() {
                     >
                       {STATUS_LABELS[agent.status] ?? agent.status}
                     </span>
+                  </div>
+                  <div className={styles.statusSince}>
+                    {agent.status === 'paused' && agent.pauseReason
+                      ? `${PAUSE_REASON_LABELS[agent.pauseReason] ?? agent.pauseReason} · hace ${timeSince(agent.updatedAt)}`
+                      : `Desde hace ${timeSince(agent.updatedAt)}`}
                   </div>
                   {activeCall ? (
                     <div className={styles.activeCallInfo}>

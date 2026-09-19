@@ -14,10 +14,9 @@ const mockJwtDecode = vi.mocked(jwtDecode);
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-function makeStore(preloadedState?: any) {
+function makeStore() {
   return configureStore({
     reducer: { auth: authReducer },
-    ...(preloadedState ? { preloadedState } : {}),
   });
 }
 

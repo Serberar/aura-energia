@@ -19,6 +19,7 @@ export interface DispositionCode {
   label:     string;
   color:     string;
   isDefault: boolean;
+  marksSaleClosed: boolean;
   order:     number;
   active:    boolean;
 }
@@ -33,6 +34,7 @@ export interface Call {
   direction: 'outbound' | 'inbound';
   duration?: number | null;
   recordingUrl?: string | null;
+  agentRecordingUrl?: string | null;
   muted: boolean;
   onHold: boolean;
   notes?: string | null;
@@ -50,6 +52,7 @@ export interface AgentSession {
   agentId:   string;
   agentName?: string | null;
   status:    AgentStatus;
+  pauseReason?: PauseReason | null;
   updatedAt: string;
 }
 

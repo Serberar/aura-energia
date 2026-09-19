@@ -14,6 +14,7 @@ const CreateCodeSchema = z.object({
   label:     z.string().min(1).max(80),
   color:     z.string().regex(/^#[0-9a-fA-F]{6}$/).optional(),
   isDefault: z.boolean().optional(),
+  marksSaleClosed: z.boolean().optional(),
   order:     z.number().int().optional(),
 });
 

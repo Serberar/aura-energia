@@ -29,9 +29,9 @@ const mockClient: Client = {
   addresses: [],
   bankAccounts: [],
   comments: [],
-  birthday: null,
+  birthday: undefined,
   businessName: undefined,
-  authorized: false,
+  authorized: undefined,
   createdAt: '2024-01-01T00:00:00Z',
   updatedAt: '2024-01-01T00:00:00Z',
 };

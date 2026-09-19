@@ -362,7 +362,7 @@ function CampaignCard({ item, busy, excelMsg, liveStats, onStart, onStop, onReim
       )}
 
       {/* Live stats */}
-      {item.dialerRunning && liveStats && (
+      {item.dialerRunning && !!liveStats && (
         <div className={s.statsBox}>
           <div className={s.statsRow}>
             <span className={s.statItem}><span className={s.statLabel}>Llamadas</span><span className={s.statVal}>{(liveStats as any).dialed}</span></span>

@@ -31,7 +31,6 @@ vi.mock('@/features/clientes/clientsSlice', async () => {
 
 import { renderWithStore } from '@/test-utils/renderWithStore';
 import ClientsPage from './ClientsPage';
-import { createClient } from '@/features/clientes/clientsSlice';
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
 

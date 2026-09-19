@@ -258,7 +258,7 @@ describe('toggleProductActive', () => {
     await store.dispatch(toggleProductActive('prod-1'));
 
     const { products } = store.getState().products;
-    expect(products.find((p) => p.id === 'prod-1')?.active).toBe(false);
+    expect(products.find((p: Product) => p.id === 'prod-1')?.active).toBe(false);
   });
 
   it('updates selectedProduct when toggled product was selected', async () => {

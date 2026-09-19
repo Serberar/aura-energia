@@ -22,7 +22,7 @@ const initialState: CallsState = {
   queueEntries: [], predictiveStats: null,
   callHistory: [], total: 0, agendaEntries: [], reminders: [],
   loading: false, error: null, wsConnected: false,
-  agentStatus: 'offline', dialerOpen: false,
+  agentStatus: 'offline', dialerOpen: false, demoActive: false,
 };
 
 describe('callsSlice reducers', () => {

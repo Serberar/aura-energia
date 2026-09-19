@@ -73,6 +73,7 @@ export interface UpdateCallInput {
   status?:            CallStatus;
   duration?:          number;
   recordingUrl?:      string;
+  agentRecordingUrl?: string;
   disposition?:       string;
   muted?:             boolean;
   onHold?:            boolean;
@@ -114,7 +115,9 @@ export interface ICallRepository {
   list(filter: ListCallsFilter): Promise<{ data: Call[]; total: number }>;
   reviewSummary(): Promise<ReviewSummaryItem[]>;
   addEvent(callId: string, event: string, payload?: unknown): Promise<void>;
-  setAgentActiveCall(agentId: string, callId: string | null): Promise<void>;
+  // Returns true when clearing the call also flipped the agent's status
+  // back to 'available' (i.e. they were 'busy' specifically because of it).
+  setAgentActiveCall(agentId: string, callId: string | null): Promise<boolean>;
   getTodayStats(): Promise<SupervisorStats>;
   getHistoricalStats(from: Date, to: Date, agentId?: string): Promise<HistoricalStats>;
   getActiveCalls(): Promise<ActiveCallInfo[]>;

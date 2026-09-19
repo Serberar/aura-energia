@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual de Aura CRM</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap');
+
+  :root {
+    --bg: #f6f5f1;
+    --surface: #ffffff;
+    --surface-2: #efece4;
+    --border: #e1ddd2;
+    --ink: #211f1a;
+    --ink-2: #5c5748;
+    --ink-3: #8b8574;
+    --accent: #2955c9;
+    --accent-ink: #ffffff;
+    --accent-soft: #e7edfb;
+    --good: #17794a;
+    --good-soft: #e5f4ec;
+    --warn: #a35a06;
+    --warn-soft: #fbeed9;
+    --m-buscador: #0d8577;
+    --m-crm: #2955c9;
+    --m-llamadas: #a35a06;
+    --m-admin: #6a4bc2;
+    --shadow: 0 1px 2px rgba(40, 35, 20, 0.06), 0 8px 24px -12px rgba(40, 35, 20, 0.12);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #15171a;
+      --surface: #1c1f23;
+      --surface-2: #23262b;
+      --border: #2e3237;
+      --ink: #e9e7e0;
+      --ink-2: #aba795;
+      --ink-3: #7d7a6d;
+      --accent: #7fa0f2;
+      --accent-ink: #0d1220;
+      --accent-soft: #202b45;
+      --good: #55cf9a;
+      --good-soft: #17301f;
+      --warn: #e5ab5a;
+      --warn-soft: #332411;
+      --m-buscador: #4fd0bd;
+      --m-crm: #7fa0f2;
+      --m-llamadas: #e5ab5a;
+      --m-admin: #b39cf0;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #15171a;
+    --surface: #1c1f23;
+    --surface-2: #23262b;
+    --border: #2e3237;
+    --ink: #e9e7e0;
+    --ink-2: #aba795;
+    --ink-3: #7d7a6d;
+    --accent: #7fa0f2;
+    --accent-ink: #0d1220;
+    --accent-soft: #202b45;
+    --good: #55cf9a;
+    --good-soft: #17301f;
+    --warn: #e5ab5a;
+    --warn-soft: #332411;
+    --m-buscador: #4fd0bd;
+    --m-crm: #7fa0f2;
+    --m-llamadas: #e5ab5a;
+    --m-admin: #b39cf0;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+  }
+
+  * { box-sizing: border-box; }
+  html { color-scheme: light dark; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    font-size: 16.5px;
+    line-height: 1.65;
+  }
+  h1, h2, h3, h4, .ui {
+    font-family: 'Manrope', -apple-system, 'Segoe UI', sans-serif;
+    text-wrap: balance;
+  }
+  a { color: var(--accent); }
+  img { max-width: 100%; }
+  ::selection { background: var(--accent-soft); }
+
+  /* ── Shell layout ─────────────────────────────────────────── */
+  .shell {
+    display: grid;
+    grid-template-columns: 272px minmax(0, 1fr);
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+  @media (max-width: 880px) {
+    .shell { grid-template-columns: 1fr; }
+  }
+
+  /* ── Sidebar ──────────────────────────────────────────────── */
+  .sidebar {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 28px 20px 40px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  @media (max-width: 880px) {
+    .sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+  }
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .brand-mark {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 800;
+    font-size: 1.05rem;
+    letter-spacing: -0.02em;
+  }
+  .brand-sub {
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.72rem;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .filter-box {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 10px;
+  }
+  .filter-box svg { flex-shrink: 0; color: var(--ink-3); }
+  #navFilter {
+    border: none;
+    background: transparent;
+    outline: none;
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.82rem;
+    color: var(--ink);
+    width: 100%;
+  }
+  #navFilter::placeholder { color: var(--ink-3); }
+
+  nav.toc { display: flex; flex-direction: column; gap: 14px; }
+  .toc-group-label {
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--ink-3);
+    padding: 0 8px;
+    margin-bottom: 4px;
+  }
+  .toc-group { display: flex; flex-direction: column; gap: 1px; }
+  .toc-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.845rem;
+    color: var(--ink-2);
+    text-decoration: none;
+    line-height: 1.3;
+  }
+  .toc-link:hover { background: var(--surface-2); color: var(--ink); }
+  .toc-link.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  .toc-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; background: var(--dot, var(--ink-3)); }
+  .toc-link[data-m="buscador"] .toc-dot { background: var(--m-buscador); }
+  .toc-link[data-m="crm"] .toc-dot { background: var(--m-crm); }
+  .toc-link[data-m="llamadas"] .toc-dot { background: var(--m-llamadas); }
+  .toc-link[data-m="admin"] .toc-dot { background: var(--m-admin); }
+
+  /* ── Main content ─────────────────────────────────────────── */
+  main { padding: 40px 44px 100px; min-width: 0; }
+  @media (max-width: 620px) { main { padding: 28px 20px 80px; } }
+
+  .hero h1 {
+    font-size: clamp(1.9rem, 4vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 0 0 10px;
+  }
+  .hero p.lead {
+    font-size: 1.1rem;
+    color: var(--ink-2);
+    max-width: 62ch;
+    margin: 0 0 22px;
+  }
+
+  .role-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 10px;
+    margin: 24px 0 8px;
+  }
+  .role-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .role-card .role-name {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    font-size: 0.92rem;
+    margin-bottom: 4px;
+  }
+  .role-card p {
+    font-size: 0.88rem;
+    color: var(--ink-2);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  hr.rule {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 44px 0;
+  }
+
+  /* ── Module group headers ─────────────────────────────────── */
+  .group-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 6px;
+    scroll-margin-top: 20px;
+  }
+  .group-pill {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 4px 10px;
+    border-radius: 999px;
+    color: var(--pill-ink);
+    background: var(--pill-bg);
+  }
+  .group-head h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .group-intro {
+    color: var(--ink-2);
+    font-size: 0.98rem;
+    max-width: 66ch;
+    margin: 0 0 26px;
+  }
+
+  [data-module="buscador"] .group-pill { --pill-bg: var(--accent-soft); --pill-ink: var(--m-buscador); }
+  [data-module="crm"] .group-pill { --pill-bg: var(--accent-soft); --pill-ink: var(--m-crm); }
+  [data-module="llamadas"] .group-pill { --pill-bg: var(--warn-soft); --pill-ink: var(--m-llamadas); }
+  [data-module="admin"] .group-pill { --pill-bg: var(--surface-2); --pill-ink: var(--m-admin); }
+
+  /* ── Feature cards ────────────────────────────────────────── */
+  .feature {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+    scroll-margin-top: 20px;
+  }
+  .feature-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+  }
+  .feature h3 {
+    font-size: 1.12rem;
+    font-weight: 700;
+    margin: 0;
+  }
+  .feature .path {
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.72rem;
+    color: var(--ink-3);
+    white-space: nowrap;
+  }
+  .who {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin: 8px 0 12px;
+  }
+  .who-chip {
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--surface-2);
+    color: var(--ink-2);
+    border: 1px solid var(--border);
+  }
+  .feature p { margin: 0 0 10px; color: var(--ink); }
+  .feature p:last-child { margin-bottom: 0; }
+  .feature ul { margin: 8px 0 10px; padding-left: 1.15em; }
+  .feature li { margin-bottom: 5px; }
+  .feature strong { color: var(--ink); }
+
+  .tip {
+    display: flex;
+    gap: 9px;
+    background: var(--accent-soft);
+    border-radius: 8px;
+    padding: 10px 13px;
+    font-size: 0.88rem;
+    color: var(--ink);
+    margin-top: 12px;
+  }
+  .tip b { font-family: 'Manrope', sans-serif; color: var(--accent); }
+
+  .warn-box {
+    display: flex;
+    gap: 9px;
+    background: var(--warn-soft);
+    border-radius: 8px;
+    padding: 10px 13px;
+    font-size: 0.88rem;
+    color: var(--ink);
+    margin-top: 12px;
+  }
+  .warn-box b { font-family: 'Manrope', sans-serif; color: var(--warn); }
+
+  .steps {
+    counter-reset: step;
+    list-style: none;
+    margin: 10px 0;
+    padding: 0;
+  }
+  .steps li {
+    counter-increment: step;
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 8px;
+  }
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0.05em;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  footer {
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    color: var(--ink-3);
+    font-size: 0.82rem;
+    font-family: 'Manrope', sans-serif;
+  }
+
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">Aura CRM</span>
+    </div>
+    <span class="brand-sub">Manual de usuario</span>
+
+    <div class="filter-box">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.35-4.35"></path></svg>
+      <input id="navFilter" type="text" placeholder="Buscar en el índice…" autocomplete="off">
+    </div>
+
+    <nav class="toc" id="tocNav">
+      <div class="toc-group">
+        <a class="toc-link" data-m="intro" href="#inicio"><span class="toc-dot"></span>Cómo usar este manual</a>
+        <a class="toc-link" data-m="intro" href="#roles"><span class="toc-dot"></span>Roles de usuario</a>
+      </div>
+
+      <div>
+        <div class="toc-group-label">Buscador</div>
+        <div class="toc-group">
+          <a class="toc-link" data-m="buscador" href="#buscar-registro"><span class="toc-dot"></span>Buscar registro</a>
+          <a class="toc-link" data-m="buscador" href="#editar-registro"><span class="toc-dot"></span>Editar registro</a>
+          <a class="toc-link" data-m="buscador" href="#aplicaciones"><span class="toc-dot"></span>Aplicaciones</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="toc-group-label">CRM</div>
+        <div class="toc-group">
+          <a class="toc-link" data-m="crm" href="#dashboard-crm"><span class="toc-dot"></span>Dashboard CRM</a>
+          <a class="toc-link" data-m="crm" href="#clientes"><span class="toc-dot"></span>Clientes</a>
+          <a class="toc-link" data-m="crm" href="#productos"><span class="toc-dot"></span>Productos</a>
+          <a class="toc-link" data-m="crm" href="#ventas"><span class="toc-dot"></span>Ventas y firma</a>
+          <a class="toc-link" data-m="crm" href="#estados-venta"><span class="toc-dot"></span>Estados de venta</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="toc-group-label">Llamadas</div>
+        <div class="toc-group">
+          <a class="toc-link" data-m="llamadas" href="#telefono"><span class="toc-dot"></span>El teléfono flotante</a>
+          <a class="toc-link" data-m="llamadas" href="#panel-llamadas"><span class="toc-dot"></span>Panel de Llamadas</a>
+          <a class="toc-link" data-m="llamadas" href="#marcador"><span class="toc-dot"></span>Marcador</a>
+          <a class="toc-link" data-m="llamadas" href="#campanas"><span class="toc-dot"></span>Campañas</a>
+          <a class="toc-link" data-m="llamadas" href="#supervisor"><span class="toc-dot"></span>Supervisor</a>
+          <a class="toc-link" data-m="llamadas" href="#reportes"><span class="toc-dot"></span>Reportes</a>
+          <a class="toc-link" data-m="llamadas" href="#revisar"><span class="toc-dot"></span>Revisar registros</a>
+          <a class="toc-link" data-m="llamadas" href="#codificaciones"><span class="toc-dot"></span>Codificaciones</a>
+          <a class="toc-link" data-m="llamadas" href="#guiones"><span class="toc-dot"></span>Guiones</a>
+          <a class="toc-link" data-m="llamadas" href="#bloqueados"><span class="toc-dot"></span>Bloqueados (DNC)</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="toc-group-label">Administración</div>
+        <div class="toc-group">
+          <a class="toc-link" data-m="admin" href="#usuarios"><span class="toc-dot"></span>Gestión de usuarios</a>
+          <a class="toc-link" data-m="admin" href="#modulos"><span class="toc-dot"></span>Módulos del sistema</a>
+          <a class="toc-link" data-m="admin" href="#config-crm"><span class="toc-dot"></span>Configuración CRM</a>
+          <a class="toc-link" data-m="admin" href="#config-llamadas"><span class="toc-dot"></span>Configuración Llamadas</a>
+          <a class="toc-link" data-m="admin" href="#firma"><span class="toc-dot"></span>Firma y contratos</a>
+          <a class="toc-link" data-m="admin" href="#ips"><span class="toc-dot"></span>IPs permitidas</a>
+        </div>
+      </div>
+    </nav>
+  </aside>
+
+  <main>
+    <div class="hero" id="inicio">
+      <h1>Manual de usuario</h1>
+      <p class="lead">
+        Aura CRM es la herramienta donde el equipo busca y gestiona clientes, cierra ventas con firma
+        electrónica del contrato, y hace las llamadas del día a día: marcar, codificar, programar
+        seguimientos y supervisar al equipo en vivo. Este manual explica, pantalla por pantalla,
+        qué hace cada sección y cómo se usa — sin entrar en nada técnico.
+      </p>
+      <p style="color: var(--ink-2); font-size: 0.92rem;">
+        Usa el buscador del índice (a la izquierda) para saltar directamente a una pantalla, o baja
+        leyendo por orden. Lo que ves en tu menú depende de tu <a href="#roles">rol</a> y de qué
+        módulos tenga activos tu administrador.
+      </p>
+    </div>
+
+    <section id="roles" style="scroll-margin-top:20px;">
+      <h2 style="font-size:1.15rem; font-weight:700; margin:30px 0 4px;">Roles de usuario</h2>
+      <p style="color:var(--ink-2); font-size:0.92rem; margin:0 0 4px; max-width:66ch;">
+        Cada cuenta tiene uno de estos cuatro roles, y determina qué ves en el menú superior y qué
+        puedes hacer en cada pantalla.
+      </p>
+      <div class="role-grid">
+        <div class="role-card">
+          <div class="role-name">Administrador</div>
+          <p>Acceso completo: toda la configuración, usuarios, productos, estados de venta y las
+          herramientas de supervisión de llamadas.</p>
+        </div>
+        <div class="role-card">
+          <div class="role-name">Coordinador</div>
+          <p>Gestiona clientes y ventas, y tiene acceso a las herramientas de supervisión de
+          llamadas (panel en vivo, campañas, reportes, codificaciones, guiones).</p>
+        </div>
+        <div class="role-card">
+          <div class="role-name">Verificador</div>
+          <p>Revisa y gestiona clientes y ventas ya creadas, sin acceso a la parte de supervisión de
+          llamadas ni a la configuración.</p>
+        </div>
+        <div class="role-card">
+          <div class="role-name">Comercial</div>
+          <p>El perfil de agente: crea ventas, hace y recibe llamadas, usa la agenda y el marcador.
+          Es quien más tiempo pasa en el teléfono flotante.</p>
+        </div>
+      </div>
+    </section>
+
+    <hr class="rule">
+
+    <!-- ══════════════════════ BUSCADOR ══════════════════════ -->
+    <div data-module="buscador">
+      <div class="group-head" id="grupo-buscador">
+        <span class="group-pill">Buscador</span>
+        <h2>Búsqueda rápida de registros</h2>
+      </div>
+      <p class="group-intro">
+        El primer grupo del menú, siempre disponible: sirve para localizar a una persona por
+        teléfono o DNI en segundos, editarla, o saltar a herramientas externas que el equipo usa a diario.
+      </p>
+
+      <article class="feature" id="buscar-registro">
+        <div class="feature-head"><h3>Buscar registro</h3><span class="path">Menú → Buscador → Buscar registro</span></div>
+        <div class="who"><span class="who-chip">Todos los roles</span></div>
+        <p>
+          La pantalla de inicio tras entrar en la aplicación. Escribe un teléfono o un DNI en el
+          buscador y pulsa <strong>Buscar</strong> (o Enter). Los resultados aparecen como tarjetas debajo,
+          con los datos de la persona; cada tarjeta se puede cerrar individualmente si ya no la
+          necesitas en pantalla. El botón <strong>Limpiar</strong> borra la búsqueda y los resultados.
+        </p>
+        <div class="tip"><b>Uso típico:</b> antes de llamar a alguien, o cuando llega una llamada
+        entrante, comprueba aquí si ya existe en el sistema.</div>
+      </article>
+
+      <article class="feature" id="editar-registro">
+        <div class="feature-head"><h3>Editar registro</h3><span class="path">Se abre desde una ficha de cliente</span></div>
+        <div class="who"><span class="who-chip">Administrador</span><span class="who-chip">Coordinador</span></div>
+        <p>
+          Formulario completo de edición de un cliente: nombre, apellidos, DNI, email, fecha de
+          nacimiento, persona autorizada y empresa. Además de los datos fijos, gestiona listas que
+          pueden crecer o reducirse:
+        </p>
+        <ul>
+          <li><strong>Teléfonos</strong> — puedes añadir varios, y llamar directamente desde cada uno.</li>
+          <li><strong>Direcciones</strong> — con sus datos de suministro (CUPS luz/gas).</li>
+          <li><strong>Cuentas bancarias</strong> y <strong>comentarios</strong> internos.</li>
+        </ul>
+        <p>Al terminar, pulsa <strong>Guardar cambios</strong>.</p>
+      </article>
+
+      <article class="feature" id="aplicaciones">
+        <div class="feature-head"><h3>Aplicaciones</h3><span class="path">Menú → Buscador → Aplicaciones</span></div>
+        <div class="who"><span class="who-chip">Todos los roles</span></div>
+        <p>
+          Un tablón de accesos directos a herramientas externas del equipo: calculadora de tarifas,
+          control horario, calculadora de IBAN, centralita telefónica, y almacenamiento de
+          documentos, entre otras. Cada tarjeta abre la herramienta correspondiente en una pestaña
+          nueva — no hay nada que configurar aquí.
+        </p>
+      </article>
+    </div>
+
+    <hr class="rule">
+
+    <!-- ══════════════════════ CRM ══════════════════════ -->
+    <div data-module="crm">
+      <div class="group-head" id="grupo-crm">
+        <span class="group-pill">CRM</span>
+        <h2>Clientes, productos y ventas</h2>
+      </div>
+      <p class="group-intro">
+        El corazón comercial de la aplicación: aquí vive el catálogo de clientes y productos, y
+        sobre todo el flujo de cierre de una venta con firma electrónica del contrato.
+      </p>
+
+      <article class="feature" id="dashboard-crm">
+        <div class="feature-head"><h3>Dashboard CRM</h3><span class="path">Menú → CRM → Dashboard CRM</span></div>
+        <div class="who"><span class="who-chip">Administrador</span></div>
+        <p>
+          Panorama general: ventas de hoy, de la semana y del mes, número de productos activos y de
+          estados de venta configurados — cada indicador lleva a su sección al pulsarlo. Debajo hay
+          accesos rápidos (<strong>Nueva Venta</strong>, <strong>Ver Clientes</strong>, <strong>Ver
+          Productos</strong>…) y un listado de las 5 ventas más recientes.
+        </p>
+      </article>
+
+      <article class="feature" id="clientes">
+        <div class="feature-head"><h3>Clientes</h3><span class="path">Menú → CRM → Clientes</span></div>
+        <div class="who"><span class="who-chip">Administrador</span><span class="who-chip">Coordinador</span><span class="who-chip">Verificador</span></div>
+        <p>
+          Listado completo de clientes con buscador y filtros integrados. El botón
+          <strong>+ Nuevo Cliente</strong> abre un formulario para dar de alta a alguien nuevo.
+          Administradores y coordinadores pueden además pulsar <strong>Editar</strong> sobre
+          cualquier cliente para ir directamente a su ficha completa (ver <a href="#editar-registro">Editar registro</a>).
+        </p>
+      </article>
+
+      <article class="feature" id="productos">
+        <div class="feature-head"><h3>Productos</h3><span class="path">Menú → CRM → Productos</span></div>
+        <div class="who"><span class="who-chip">Administrador</span></div>
+        <p>
+          El catálogo que se ofrece en las ventas (tarifas de luz, gas, fibra…). Con
+          <strong>+ Nuevo Producto</strong> se da de alta uno nuevo; al hacer clic sobre un producto
+          existente se abre el mismo formulario ya relleno, listo para editar.
+        </p>
+      </article>
+
+      <article class="feature" id="ventas">
+        <div class="feature-head"><h3>Ventas y firma electrónica</h3><span class="path">Menú → CRM → Ventas</span></div>
+        <div class="who"><span class="who-chip">Todos los roles</span></div>
+        <p>
+          La pantalla más importante para un comercial. Al crear una venta nueva se sigue este
+          recorrido:
+        </p>
+        <ol class="steps">
+          <li>Buscar y seleccionar el cliente (o darlo de alta si no existe).</li>
+          <li>Elegir los productos que componen la venta.</li>
+          <li>El campo de comercial se rellena solo con tu usuario.</li>
+          <li>
+            En <strong>Firma del contrato</strong>: eliges cómo se envía (Email o SMS), qué
+            plantilla de contrato usar si hay varias, y los datos de contacto del firmante. Puedes
+            pulsar <strong>Previsualizar contrato</strong> antes de mandarlo.
+          </li>
+          <li>
+            Al pulsar <strong>Enviar para firma</strong>, el contrato sale hacia el cliente y la
+            pantalla queda «esperando firma» (con opción de reenviar). En cuanto el cliente firma,
+            cambia sola a «Contrato firmado» y se descarga la evidencia de firma.
+          </li>
+          <li>Solo entonces se activa <strong>Crear venta</strong>, que confirma el alta definitiva.</li>
+        </ol>
+        <div class="warn-box"><b>Sin firma requerida:</b> si tu administrador ha desactivado la
+        firma obligatoria, aparece la opción <strong>Guardar sin firma</strong> — la venta queda
+        marcada como pendiente de revisión manual.</div>
+        <p style="margin-top:12px;">
+          Desde el detalle de una venta ya creada se puede cambiar su estado, añadir o quitar
+          productos, y consultar el historial de cambios.
+        </p>
+      </article>
+
+      <article class="feature" id="estados-venta">
+        <div class="feature-head"><h3>Estados de venta</h3><span class="path">Menú → CRM → Estados de Venta</span></div>
+        <div class="who"><span class="who-chip">Administrador</span></div>
+        <p>
+          Define las etapas por las que pasa una venta (por ejemplo «Pendiente firma»,
+          «Firmada», «Cancelada»…). Se pueden crear, editar, eliminar (con confirmación) y
+          reordenar — el orden que fijes aquí es el que se ve en el resto del sistema.
+        </p>
+      </article>
+    </div>
+
+    <hr class="rule">
+
+    <!-- ══════════════════════ LLAMADAS ══════════════════════ -->
+    <div data-module="llamadas">
+      <div class="group-head" id="grupo-llamadas">
+        <span class="group-pill">Llamadas</span>
+        <h2>Centralita, agenda y supervisión</h2>
+      </div>
+      <p class="group-intro">
+        Todo lo relacionado con hacer, recibir, codificar y supervisar llamadas. Es el módulo con
+        más pantallas porque cubre tanto el trabajo diario del agente como las herramientas de
+        gestión de un coordinador.
+      </p>
+
+      <article class="feature" id="telefono">
+        <div class="feature-head"><h3>El teléfono flotante</h3><span class="path">Visible en cualquier pantalla</span></div>
+        <div class="who"><span class="who-chip">Administrador</span><span class="who-chip">Coordinador</span><span class="who-chip">Comercial</span></div>
+        <p>
+          Un botón de teléfono flotante, siempre visible mientras el módulo de llamadas está activo.
+          Es tu mando de llamada del día a día:
+        </p>
+        <ul>
+          <li>Pulsa el botón para abrir el marcador manual y escribir o marcar un número.</li>
+          <li>Cuando entra o sale una llamada, el widget muestra el teléfono y, si el número
+          coincide con un cliente, su nombre y dirección automáticamente.</li>
+          <li>En llamada tienes: <strong>silenciar</strong> el micrófono, <strong>poner en
+          espera</strong>, teclado <strong>DTMF</strong> (para menús automáticos), un cuadro de
+          <strong>notas</strong> rápidas, y el <strong>guion</strong> de la campaña si hay uno
+          configurado — con el nombre del cliente y el tuyo ya rellenados en el texto.</li>
+          <li>Al colgar se abre automáticamente el panel de <strong>cierre de llamada</strong>: eliges
+          el resultado (código de disposición), añades una nota y pulsas <strong>Guardar y
+          cerrar</strong>. Tienes un contador con 120 segundos para hacerlo, ampliable de 30 en 30
+          segundos con el botón <strong>+30s</strong> si necesitas más tiempo.</li>
+        </ul>
+        <div class="tip"><b>Venta cerrada:</b> si el resultado que eliges está marcado como «crea
+        venta» (normalmente «Venta cerrada»), al guardar se te lleva directamente al formulario de
+        <a href="#ventas">Nueva Venta</a> con el cliente ya buscado — para que la venta quede
+        registrada en el momento, sin tener que buscarlo de nuevo.</div>
+      </article>
+
+      <article class="feature" id="panel-llamadas">
+        <div class="feature-head"><h3>Panel de Llamadas</h3><span class="path">Menú → Llamadas → Llamadas</span></div>
+        <div class="who"><span class="who-chip">Administrador</span><span class="who-chip">Coordinador</span><span class="who-chip">Comercial</span></div>
+        <p>Tiene tres pestañas:</p>
+        <ul>
+          <li><strong>Historial</strong> — todas tus llamadas, con filtros por fecha, teléfono y
+          estado, y reproductor para escuchar la grabación cuando exista.</li>
+          <li><strong>Agenda</strong> — tus citas y recordatorios de llamada. Con
+          <strong>+ Nueva cita</strong> programas una llamada futura (teléfono, nombre, fecha/hora,
+          aviso previo opcional, prioridad y notas); cada cita se puede llamar directamente,
+          editar o eliminar desde la lista.</li>
+          <li><strong>Mis pausas</strong> — el registro de tus descansos de hoy: motivo, hora de
+          inicio y duración de cada uno, con el total del día.</li>
+        </ul>
+        <p>
+          Arriba de todo eliges tu <strong>estado</strong> (Disponible, Pausa, Ocupado,
+          Offline). Al elegir «Pausa» te pide el motivo (descanso, comida, formación…) — ese
+          motivo y el tiempo que estás fuera quedan registrados y son visibles para tu
+          coordinador en el <a href="#supervisor">panel de Supervisor</a>.
+        </p>
+      </article>
+
+      <article class="feature" id="marcador">
+        <div class="feature-head"><h3>Marcador</h3><span class="path">Menú → Llamadas → Marcador</span></div>
+        <div class="who"><span class="who-chip">Administrador</span><span class="who-chip">Coordinador</span><span class="who-chip">Comercial</span></div>
+        <p>
+          Para trabajar una lista de contactos de forma sistemática en vez de marcar uno a uno:
+          creas una lista (a mano o subiendo un Excel), la abres, y el sistema te presenta el
+          siguiente contacto pendiente con dos botones — <strong>Llamar</strong> o
+          <strong>Omitir</strong> — mientras una barra de progreso muestra cuántos quedan, cuántos se
+          han llamado y cuántos se han omitido.
+        </p>
+        <p style="color:var(--ink-2); font-size:0.88rem;">
+          No lo confundas con el <a href="#telefono">teléfono flotante</a>: el flotante es para una
+          llamada suelta y controlarla en curso; el Marcador es la herramienta para recorrer
+          muchos contactos seguidos, de forma ordenada.
+        </p>
+      </article>
+
+      <article class="feature" id="campanas">
+        <div class="feature-head"><h3>Campañas</h3><span class="path">Menú → Llamadas → Campañas</span></div>
+        <div class="who"><span class="who-chip">Administrador</span><span class="who-chip">Coordinador</span></div>
+        <p>
+          Una campaña es una lista de contactos generada automáticamente a partir de filtros del
+          CRM (por ejemplo, «clientes en tal estado de venta» y/o «con tal producto»), con un
+          límite de contactos y un número máximo de intentos por persona. <strong>+ Nueva
+          campaña</strong> abre el formulario para definir esos filtros.
+        </p>
+        <p>Cada campaña, como tarjeta, permite:</p>
+        <ul>
+          <li><strong>Iniciar / Detener</strong> la campaña.</li>
+          <li><strong>Añadir contactos nuevos</strong> — vuelve a aplicar el filtro para incorporar
+          clientes que cumplan la condición y aún no estén en la lista.</li>
+          <li><strong>Subir lista Excel</strong> — añade contactos a mano.</li>
+          <li><strong>Editar</strong> o <strong>Reiniciar</strong> (vuelve a poner todos los
+          contactos como pendientes).</li>
+        </ul>
+      </article>
+
+      <article class="feature" id="supervisor">
+        <div class="feature-head"><h3>Supervisor</h3><span class="path">Menú → Llamadas → Supervisor</span></div>
+        <div class="who"><span class="who-chip">Administrador</span><span class="who-chip">Coordinador</span></div>
+        <p>Panel de control en vivo del equipo, con varios bloques:</p>
+        <ul>
+          <li><strong>Indicadores de hoy</strong> — llamadas totales, contestadas, tasa de
+          respuesta, duración media y agentes conectados por estado.</li>
+          <li><strong>En cola de espera</strong> — llamadas entrantes que están esperando a que un
+          agente quede libre, con su posición en la cola.</li>
+          <li><strong>Llamadas activas</strong> — quién está hablando ahora mismo, con qué número y
+          desde cuándo. Junto a cada una hay dos botones: <strong>Escuchar</strong> (oyes la
+          llamada sin que nadie lo note) y <strong>Susurrar</strong> (hablas solo con el agente,
+          sin que el cliente te oiga).</li>
+          <li><strong>Estado de agentes</strong> — una tarjeta por agente con su estado actual, y si
+          está en pausa, el motivo y desde cuándo. Al hacer clic en una tarjeta se abre su historial
+          detallado de llamadas y pausas del día.</li>
+          <li><strong>Histórico</strong> — los mismos indicadores pero de los últimos 7, 30 o 90
+          días, con gráficas de tendencia diaria, distribución por hora, resultados más frecuentes
+          y un ranking de agentes.</li>
+        </ul>
+      </article>
+
+      <article class="feature" id="reportes">
+        <div class="feature-head"><h3>Reportes</h3><span class="path">Menú → Llamadas → Reportes</span></div>
+        <div class="who"><span class="who-chip">Administrador</span><span class="who-chip">Coordinador</span></div>
+        <p>
+          Estadísticas de llamadas por rango de fechas, con las mismas gráficas que el histórico
+          del panel de Supervisor (tendencia diaria, distribución horaria, disposiciones,
+          ranking de agentes), pensado para consultar un período concreto con calma.
+        </p>
+      </article>
+
+      <article class="feature" id="revisar">
+        <div class="feature-head"><h3>Revisar registros</h3><span class="path">Menú → Llamadas → Revisar registros</span></div>
+        <div class="who"><span class="who-chip">Administrador</span><span class="who-chip">Coordinador</span></div>
+        <p>
+          Vista de control de calidad: un resumen de cuántas llamadas hay de cada resultado
+          (código de disposición), para detectar de un vistazo, por ejemplo, si hay demasiados
+          «número incorrecto» que convendría pasar a la lista de bloqueados.
+        </p>
+      </article>
+
+      <article class="feature" id="codificaciones">
+        <div class="feature-head"><h3>Codificaciones</h3><span class="path">Menú → Llamadas → Codificaciones</span></div>
+        <div class="who"><span class="who-chip">Administrador</span><span class="who-chip">Coordinador</span></div>
+        <p>
+          Los resultados posibles que un agente puede elegir al cerrar una llamada (Interesado,
+          No interesado, Buzón de voz, Venta cerrada…). Desde aquí se crean nuevos, con su color, y
+          se puede marcar uno como <strong>opción por defecto</strong> o como el que
+          <strong>lleva a registrar una venta</strong> en el CRM al seleccionarlo (ver
+          <a href="#telefono">El teléfono flotante</a>).
+        </p>
+      </article>
+
+      <article class="feature" id="guiones">
+        <div class="feature-head"><h3>Guiones</h3><span class="path">Menú → Llamadas → Guiones</span></div>
+        <div class="who"><span class="who-chip">Administrador</span><span class="who-chip">Coordinador</span></div>
+        <p>
+          El texto de apoyo que un agente puede consultar durante la llamada (presentación,
+          argumentario, respuestas a objeciones). Se escribe una vez aquí y aparece, con el nombre
+          del cliente y del agente ya rellenados, en el panel del <a href="#telefono">teléfono
+          flotante</a> durante la llamada.
+        </p>
+      </article>
+
+      <article class="feature" id="bloqueados">
+        <div class="feature-head"><h3>Bloqueados (DNC)</h3><span class="path">Menú → Llamadas → Bloqueados</span></div>
+        <div class="who"><span class="who-chip">Administrador</span><span class="who-chip">Coordinador</span></div>
+        <p>
+          La lista de números a los que no se debe volver a llamar (a petición del cliente, por
+          normativa, o porque son de empresa). Cualquier número en esta lista queda protegido
+          frente a nuevas llamadas o campañas; se puede añadir uno a uno o en bloque.
+        </p>
+      </article>
+    </div>
+
+    <hr class="rule">
+
+    <!-- ══════════════════════ ADMINISTRACIÓN ══════════════════════ -->
+    <div data-module="admin">
+      <div class="group-head" id="grupo-admin">
+        <span class="group-pill">Administración</span>
+        <h2>Usuarios y configuración</h2>
+      </div>
+      <p class="group-intro">
+        Visible solo para el rol Administrador: gestión de cuentas y todos los interruptores que
+        controlan cómo se comporta la aplicación para el resto del equipo.
+      </p>
+
+      <article class="feature" id="usuarios">
+        <div class="feature-head"><h3>Gestión de usuarios</h3><span class="path">Menú → Configuración → Gestión de Usuarios</span></div>
+        <div class="who"><span class="who-chip">Administrador</span></div>
+        <p>
+          Listado de todas las cuentas del sistema. <strong>+ Nuevo Usuario</strong> abre un
+          formulario para crear una cuenta con nombre, apellidos, usuario, contraseña y un
+          <a href="#roles">rol</a> (Administrador, Coordinador, Verificador o Comercial). Desde el
+          propio listado se edita o se cambia el rol de una cuenta existente.
+        </p>
+      </article>
+
+      <article class="feature" id="modulos">
+        <div class="feature-head"><h3>Módulos del sistema</h3><span class="path">Configuración → Módulos del sistema</span></div>
+        <div class="who"><span class="who-chip">Administrador</span></div>
+        <p>Cuatro interruptores generales que activan o desactivan, para toda la empresa y al instante:</p>
+        <ul>
+          <li><strong>CRM</strong> — clientes, productos y ventas.</li>
+          <li><strong>Gestor de Llamadas</strong> — el teléfono flotante, la agenda y el panel de supervisor.</li>
+          <li><strong>Buscador Online</strong> — añade una fuente de búsqueda externa a la búsqueda
+          en base de datos local.</li>
+          <li><strong>Firma Electrónica</strong> — firma digital de contratos al crear una venta.</li>
+        </ul>
+      </article>
+
+      <article class="feature" id="config-crm">
+        <div class="feature-head"><h3>Configuración del CRM</h3><span class="path">Configuración → Módulo CRM</span></div>
+        <div class="who"><span class="who-chip">Administrador</span></div>
+        <p>
+          Activa o desactiva la búsqueda online que complementa la base de datos local, y da acceso
+          al <strong>importador de clientes</strong>: un asistente en cuatro pasos — descargar la
+          plantilla Excel, subir el archivo relleno, revisar una vista previa fila por fila con los
+          errores marcados, y confirmar la importación solo de las filas válidas.
+        </p>
+      </article>
+
+      <article class="feature" id="config-llamadas">
+        <div class="feature-head"><h3>Configuración de Llamadas</h3><span class="path">Configuración → Módulo de Llamadas</span></div>
+        <div class="who"><span class="who-chip">Administrador</span></div>
+        <p>
+          Además de gestionar las <a href="#codificaciones">codificaciones</a> con el mismo
+          formulario que la pantalla dedicada, aquí se encuentra el simulador de sesión de
+          llamadas: un modo de demostración que marca contactos de ejemplo de forma automática y
+          continua, útil para enseñar el funcionamiento del sistema sin depender de llamadas reales.
+        </p>
+      </article>
+
+      <article class="feature" id="firma">
+        <div class="feature-head"><h3>Firma electrónica y plantillas de contrato</h3><span class="path">Configuración → Firma Electrónica</span></div>
+        <div class="who"><span class="who-chip">Administrador</span></div>
+        <p>
+          Desde aquí se entra al gestor de <strong>plantillas de contrato</strong> — el diseño del
+          documento que recibe el cliente para firmar. Puede haber varias plantillas, una marcada
+          como la de por defecto. El editor de una plantilla tiene un panel de edición y una
+          vista previa en vivo del contrato en formato A4: se sube el logo de la empresa, y se
+          arma el documento con bloques reutilizables (datos del cliente, tabla de productos,
+          bloque de firma, texto libre…) que se ordenan dentro de una o varias páginas.
+        </p>
+      </article>
+
+      <article class="feature" id="ips">
+        <div class="feature-head"><h3>IPs permitidas</h3><span class="path">Configuración → IPs Permitidas</span></div>
+        <div class="who"><span class="who-chip">Administrador</span></div>
+        <p>
+          Restringe el acceso a la aplicación por dirección de red. Con el interruptor
+          <strong>Control de acceso por IP</strong> activado, solo entran las IPs de la lista de
+          abajo; la pantalla te avisa si, al activarlo, tu propia conexión actual se quedaría fuera.
+          Las IPs se añaden y eliminan una a una, con una descripción opcional para identificarlas
+          («Oficina Madrid», «VPN equipo comercial»…).
+        </p>
+      </article>
+    </div>
+
+    <footer>
+      Aura CRM — Manual de usuario. Lo que ves en tu menú depende de tu rol y de los módulos
+      activos en tu empresa; si echas en falta una pantalla mencionada aquí, consulta con tu
+      administrador.
+    </footer>
+  </main>
+</div>
+
+<script>
+  // Filtro del índice
+  const filterInput = document.getElementById('navFilter');
+  const tocLinks = Array.from(document.querySelectorAll('.toc-link'));
+  const tocGroupLabels = Array.from(document.querySelectorAll('.toc-group-label'));
+
+  filterInput.addEventListener('input', () => {
+    const q = filterInput.value.trim().toLowerCase();
+    tocLinks.forEach((link) => {
+      const match = !q || link.textContent.toLowerCase().includes(q);
+      link.hidden = !match;
+    });
+    tocGroupLabels.forEach((label) => {
+      const group = label.nextElementSibling;
+      const anyVisible = group && Array.from(group.querySelectorAll('.toc-link')).some((l) => !l.hidden);
+      label.hidden = !anyVisible;
+    });
+  });
+
+  // Scroll-spy: resalta el enlace de la sección visible
+  const sections = tocLinks
+    .map((l) => document.querySelector(l.getAttribute('href')))
+    .filter(Boolean);
+
+  const spy = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const id = '#' + entry.target.id;
+        const link = tocLinks.find((l) => l.getAttribute('href') === id);
+        if (!link) return;
+        if (entry.isIntersecting) {
+          tocLinks.forEach((l) => l.classList.remove('active'));
+          link.classList.add('active');
+        }
+      });
+    },
+    { rootMargin: '-15% 0px -70% 0px', threshold: 0 }
+  );
+  sections.forEach((s) => spy.observe(s));
+</script>
+
+</body>
+</html>

@@ -30,6 +30,8 @@ const mockClient: Client = {
   addresses: [{ address: 'Calle Mayor 1', cupsGas: '', cupsLuz: '' }],
   bankAccounts: [],
   comments: [],
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
 };
 
 describe('clientService', () => {

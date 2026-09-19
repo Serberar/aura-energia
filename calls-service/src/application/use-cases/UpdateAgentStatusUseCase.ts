@@ -1,9 +1,12 @@
 import { prisma } from '@infrastructure/prisma/prismaClient';
 import type { AgentStatus, AgentSession } from '@domain/entities/AgentSession';
 import type { WebSocketServer } from '@infrastructure/websocket/WebSocketServer';
+import type { InboundRoutingService } from '@application/services/InboundRoutingService';
+
+const STALE_OFFLINE_HOURS = 24;
 
 export class UpdateAgentStatusUseCase {
-  constructor(private wss: WebSocketServer) {}
+  constructor(private wss: WebSocketServer, private routing?: InboundRoutingService) {}
 
   async execute(agentId: string, status: AgentStatus, pauseReason?: string, agentName?: string): Promise<AgentSession> {
     // Close open pause log when leaving paused state
@@ -25,6 +28,9 @@ export class UpdateAgentStatusUseCase {
     if (agentName)                             updateData.agentName   = agentName;
     if (status === 'paused' && pauseReason)    updateData.pauseReason = pauseReason;
     if (status !== 'paused')                   updateData.pauseReason = null;
+    // Stepping away while a call offer is pending releases the reservation
+    // immediately instead of making the caller wait for the no-answer timeout.
+    if (status === 'paused' || status === 'offline') updateData.activeCallId = null;
 
     const session = await (prisma.agentSession.upsert as any)({
       where:  { agentId },
@@ -43,7 +49,13 @@ export class UpdateAgentStatusUseCase {
       });
     }
 
-    this.wss.broadcast({ type: 'agent:status-changed', agentId, status, agentName: session.agentName, pauseReason: updateData.pauseReason });
+    this.wss.broadcast({ type: 'agent:status-changed', agentId, status, agentName: session.agentName, pauseReason: updateData.pauseReason, updatedAt: session.updatedAt });
+
+    // An agent going available might be exactly what a queued caller has been waiting for.
+    if (status === 'available') {
+      this.routing?.drainQueueForAgent(agentId).catch(() => {});
+    }
+
     return session as AgentSession;
   }
 
@@ -56,8 +68,20 @@ export class UpdateAgentStatusUseCase {
     return session as AgentSession;
   }
 
+  // Only surfaces sessions still relevant to a live supervisor dashboard —
+  // agents offline for more than a day are excluded so the grid doesn't
+  // accumulate every agent who has ever logged in, forever.
   async listAll(): Promise<AgentSession[]> {
-    return prisma.agentSession.findMany() as Promise<AgentSession[]>;
+    const staleCutoff = new Date(Date.now() - STALE_OFFLINE_HOURS * 3_600_000);
+    return prisma.agentSession.findMany({
+      where: {
+        OR: [
+          { status: { not: 'offline' } },
+          { updatedAt: { gte: staleCutoff } },
+        ],
+      },
+      orderBy: { updatedAt: 'desc' },
+    }) as Promise<AgentSession[]>;
   }
 
   async getPauseLogs(agentId: string, date?: Date): Promise<unknown[]> {

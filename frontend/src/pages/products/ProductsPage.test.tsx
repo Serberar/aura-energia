@@ -31,7 +31,6 @@ vi.mock('@/features/products/productsSlice', async () => {
 
 import { renderWithStore } from '@/test-utils/renderWithStore';
 import ProductsPage from './ProductsPage';
-import * as productsSlice from '@/features/products/productsSlice';
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
 

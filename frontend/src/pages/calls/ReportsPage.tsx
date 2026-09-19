@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { getHistoricalStats } from '@/features/calls/services/reportsService';
 import type { HistoricalStats, HourlyBucket, DailyBucket, DispositionBucket, AgentRankEntry } from '@/features/calls/services/reportsService';
 import s from './ReportsPage.module.scss';
@@ -40,7 +40,7 @@ const H = 180;
 const PAD = { top: 12, right: 16, bottom: 36, left: 40 };
 
 function BarChart({ data, xKey, yKey, color = '#2563eb', label }: {
-  data: Record<string, number>[];
+  data: Record<string, string | number>[];
   xKey: string;
   yKey: string;
   color?: string;

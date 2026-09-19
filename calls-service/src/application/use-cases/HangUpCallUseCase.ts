@@ -2,11 +2,13 @@ import axios from 'axios';
 import { config } from '@infrastructure/../config';
 import type { ICallRepository } from '@domain/repositories/ICallRepository';
 import type { WebSocketServer } from '@infrastructure/websocket/WebSocketServer';
+import type { InboundRoutingService } from '@application/services/InboundRoutingService';
 
 export class HangUpCallUseCase {
   constructor(
     private calls: ICallRepository,
     private wss: WebSocketServer,
+    private routing?: InboundRoutingService,
   ) {}
 
   async execute(callId: string): Promise<void> {
@@ -29,5 +31,14 @@ export class HangUpCallUseCase {
     });
 
     this.wss.sendToAgent(call.agentId, { type: 'call:completed', call: updated });
+
+    // Same "agent is free again" bookkeeping as the provider-webhook path
+    // (HandleCallEventUseCase) — without this, every agent who hangs up
+    // manually stays stuck at 'busy' forever.
+    const becameAvailable = await this.calls.setAgentActiveCall(call.agentId, null);
+    if (becameAvailable) {
+      this.wss.broadcast({ type: 'agent:status-changed', agentId: call.agentId, status: 'available' });
+      this.routing?.drainQueueForAgent(call.agentId).catch(() => {});
+    }
   }
 }

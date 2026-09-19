@@ -4,6 +4,7 @@ import type { ICallRepository } from '@domain/repositories/ICallRepository';
 import type { Call, CallStatus } from '@domain/entities/Call';
 import { isTerminal } from '@domain/entities/Call';
 import type { WebSocketServer } from '@infrastructure/websocket/WebSocketServer';
+import type { InboundRoutingService } from '@application/services/InboundRoutingService';
 
 export interface CallEventPayload {
   callId:         string;
@@ -30,6 +31,7 @@ export class HandleCallEventUseCase {
   constructor(
     private calls: ICallRepository,
     private wss: WebSocketServer,
+    private routing?: InboundRoutingService,
   ) {}
 
   async execute(payload: CallEventPayload): Promise<void> {
@@ -60,9 +62,18 @@ export class HandleCallEventUseCase {
       event: payload,
     });
 
-    // Clear active call on agent session when terminal
+    // Clear active call on agent session when terminal, and free the agent
+    // back up (both for the live dashboard and so the next queued caller —
+    // if any — can be routed to them) if they were only 'busy' because of it.
     if (newStatus && isTerminal(newStatus)) {
-      this.calls.setAgentActiveCall(call.agentId, null).catch(() => {});
+      this.calls.setAgentActiveCall(call.agentId, null)
+        .then((becameAvailable) => {
+          if (becameAvailable) {
+            this.wss.broadcast({ type: 'agent:status-changed', agentId: call.agentId, status: 'available' });
+            this.routing?.drainQueueForAgent(call.agentId).catch(() => {});
+          }
+        })
+        .catch(() => {});
       this.notifyCrm(updated).catch(() => { /* fire-and-forget */ });
     }
   }

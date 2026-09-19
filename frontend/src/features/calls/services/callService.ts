@@ -1,6 +1,6 @@
 import callsApi from './callsApi';
 import { CALLS_ENDPOINTS } from './api';
-import type { Call, AgentStatus, PauseLog } from '../types';
+import type { Call, AgentStatus, PauseLog, QueueEntry } from '../types';
 
 export interface InitiateCallPayload {
   clientPhone: string;
@@ -45,6 +45,11 @@ export function buildExportUrl(params: CallsFilter): string {
   const base = (callsApi.defaults.baseURL ?? '') + '/calls/export';
   const q    = new URLSearchParams(Object.entries(params).filter(([, v]) => v != null) as [string, string][]);
   return q.toString() ? `${base}?${q}` : base;
+}
+
+export async function getInboundQueue(): Promise<QueueEntry[]> {
+  const { data } = await callsApi.get<QueueEntry[]>('/inbound/queue');
+  return data;
 }
 
 export async function setAgentStatus(status: AgentStatus, pauseReason?: string): Promise<void> {

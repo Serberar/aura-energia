@@ -38,7 +38,12 @@ import salesReducer, {
   deleteSale,
 } from './salesSlice';
 import * as saleService from './services/saleService';
-import type { Sale } from '@/types/sales';
+import type { Sale, ClientSnapshot } from '@/types/sales';
+
+const mockClientSnapshot: ClientSnapshot = {
+  id: 'client-1', firstName: 'María', lastName: 'González', dni: '12345678A',
+  phones: ['612345678'], bankAccounts: [], address: { address: 'Calle Mayor 1' },
+};
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -248,7 +253,7 @@ describe('fetchSaleById', () => {
     await store.dispatch(fetchSaleById('sale-1'));
 
     const { sales } = store.getState().sales;
-    expect(sales.find((s) => s.id === 'sale-1')?.totalAmount).toBe(150);
+    expect(sales.find((s: Sale) => s.id === 'sale-1')?.totalAmount).toBe(150);
   });
 
   it('sets error on rejected with server message', async () => {
@@ -283,7 +288,7 @@ describe('createSale', () => {
     await store.dispatch(fetchSales(undefined));
 
     vi.mocked(saleService.createSale).mockResolvedValue(mockSale1);
-    await store.dispatch(createSale({ clientId: 'client-1', statusId: 'status-1' }));
+    await store.dispatch(createSale({ client: mockClientSnapshot, statusId: 'status-1', comercial: 'Test', items: [] }));
 
     const { sales } = store.getState();
     expect(sales.sales).toHaveLength(2);
@@ -298,7 +303,7 @@ describe('createSale', () => {
       response: { data: { message: 'Client not found' } },
     });
 
-    await store.dispatch(createSale({ clientId: 'x', statusId: 'y' }));
+    await store.dispatch(createSale({ client: mockClientSnapshot, statusId: 'y', comercial: 'Test', items: [] }));
 
     expect(store.getState().sales.error).toBe('Client not found');
   });
@@ -307,7 +312,7 @@ describe('createSale', () => {
     const store = makeStore();
     vi.mocked(saleService.createSale).mockRejectedValue(new Error('Network'));
 
-    await store.dispatch(createSale({ clientId: 'x', statusId: 'y' }));
+    await store.dispatch(createSale({ client: mockClientSnapshot, statusId: 'y', comercial: 'Test', items: [] }));
 
     expect(store.getState().sales.error).toBe('Error al crear venta');
   });
@@ -326,7 +331,7 @@ describe('addSaleItem', () => {
 
     const updatedSale = { ...mockSale1, totalAmount: 150, items: [{ id: 'item-1' } as any] };
     vi.mocked(saleService.addSaleItem).mockResolvedValue(updatedSale);
-    await store.dispatch(addSaleItem({ saleId: 'sale-1', itemData: { name: 'Item', quantity: 1, unitPrice: 50, productId: 'p1' } }));
+    await store.dispatch(addSaleItem({ saleId: 'sale-1', itemData: { name: 'Item', quantity: 1, price: 50, productId: 'p1' } }));
 
     const { sales } = store.getState();
     expect(sales.sales[0].totalAmount).toBe(150);
@@ -339,7 +344,7 @@ describe('addSaleItem', () => {
       response: { data: { message: 'Product not found' } },
     });
 
-    await store.dispatch(addSaleItem({ saleId: 'sale-1', itemData: { name: 'Item', quantity: 1, unitPrice: 10, productId: 'x' } }));
+    await store.dispatch(addSaleItem({ saleId: 'sale-1', itemData: { name: 'Item', quantity: 1, price: 10, productId: 'x' } }));
 
     expect(store.getState().sales.error).toBe('Product not found');
   });
@@ -348,7 +353,7 @@ describe('addSaleItem', () => {
     const store = makeStore();
     vi.mocked(saleService.addSaleItem).mockRejectedValue(new Error('Network'));
 
-    await store.dispatch(addSaleItem({ saleId: 'sale-1', itemData: { name: 'Item', quantity: 1, unitPrice: 10, productId: 'x' } }));
+    await store.dispatch(addSaleItem({ saleId: 'sale-1', itemData: { name: 'Item', quantity: 1, price: 10, productId: 'x' } }));
 
     expect(store.getState().sales.error).toBe('Error al añadir item');
   });

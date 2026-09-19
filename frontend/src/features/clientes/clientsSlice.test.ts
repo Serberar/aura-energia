@@ -47,6 +47,8 @@ const mockClient1: Client = {
   addresses: [],
   bankAccounts: [],
   comments: [],
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
 };
 
 const mockClient2: Client = {
@@ -58,6 +60,8 @@ const mockClient2: Client = {
   addresses: [],
   bankAccounts: [],
   comments: [],
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
 };
 
 // ─── synchronous reducers ─────────────────────────────────────────────────────

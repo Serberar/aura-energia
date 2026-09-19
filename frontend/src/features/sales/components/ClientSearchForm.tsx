@@ -1,6 +1,7 @@
 /* src/features/sales/components/ClientSearchForm.tsx */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Input from '@/design-system/components/Input';
 import Button from '@/design-system/components/Button';
 import type { AddressInfo } from '@/types/sales';
@@ -44,8 +45,9 @@ const emptyFormData = () => ({
 });
 
 const ClientSearchForm = ({ onClientSelected, initialData }: ClientSearchFormProps) => {
+  const [searchParams] = useSearchParams();
   const [mode, setMode] = useState<Mode>('search');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(() => searchParams.get('phone') ?? '');
   const [isSearching, setIsSearching] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
 
@@ -57,6 +59,14 @@ const ClientSearchForm = ({ onClientSelected, initialData }: ClientSearchFormPro
   const [formData, setFormData] = useState<any>(
     initialData || emptyFormData()
   );
+
+  // Llegamos aquí desde el cierre de una llamada con "Venta cerrada": buscamos
+  // directamente al cliente por el teléfono que acaba de llamar.
+  useEffect(() => {
+    const phone = searchParams.get('phone');
+    if (phone) handleSearch(phone);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // ── Cambiar a modo manual ────────────────────────────────────────────────
   const switchToManual = () => {
@@ -79,8 +89,9 @@ const ClientSearchForm = ({ onClientSelected, initialData }: ClientSearchFormPro
   };
 
   // ── Búsqueda en el sistema ───────────────────────────────────────────────
-  const handleSearch = async () => {
-    if (!searchTerm.trim()) {
+  const handleSearch = async (termOverride?: string) => {
+    const term = termOverride ?? searchTerm;
+    if (!term.trim()) {
       setSearchError('Ingrese un DNI o teléfono');
       return;
     }
@@ -90,7 +101,7 @@ const ClientSearchForm = ({ onClientSelected, initialData }: ClientSearchFormPro
     setIsConfirmed(false);
 
     try {
-      const result = await clientService.searchClient(searchTerm.trim());
+      const result = await clientService.searchClient(term.trim());
       const rawClients = Array.isArray(result) ? result : [result];
 
       if (!rawClients.length || !rawClients[0]) {
@@ -239,7 +250,7 @@ const ClientSearchForm = ({ onClientSelected, initialData }: ClientSearchFormPro
             <Button
               type="button"
               variant="primary"
-              onClick={handleSearch}
+              onClick={() => handleSearch()}
               disabled={isSearching}
               className={styles.searchButton}
             >

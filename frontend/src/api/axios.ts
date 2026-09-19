@@ -41,15 +41,17 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // Log del error
-    logger.apiError(
-      `${originalRequest?.method?.toUpperCase()} ${originalRequest?.url}`,
-      error,
-      {
-        status: error.response?.status,
-        statusText: error.response?.statusText
-      }
-    );
+    // Las peticiones canceladas (AbortController) no son errores reales — no las logueamos
+    if (!axios.isCancel(error)) {
+      logger.apiError(
+        `${originalRequest?.method?.toUpperCase()} ${originalRequest?.url}`,
+        error,
+        {
+          status: error.response?.status,
+          statusText: error.response?.statusText
+        }
+      );
+    }
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;

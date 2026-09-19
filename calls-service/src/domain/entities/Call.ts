@@ -12,6 +12,7 @@ export interface Call {
   direction:      CallDirection;
   duration?:      number | null;
   recordingUrl?:  string | null;
+  agentRecordingUrl?: string | null;
   disposition?:   string | null;
   muted:          boolean;
   onHold:         boolean;

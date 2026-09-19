@@ -23,6 +23,7 @@ function DispositionSection() {
   const [label, setLabel]       = useState('');
   const [color, setColor]       = useState('#3b82f6');
   const [isDefault, setIsDefault] = useState(false);
+  const [marksSaleClosed, setMarksSaleClosed] = useState(false);
   const [saving, setSaving]     = useState(false);
   const [error, setError]       = useState<string | null>(null);
 
@@ -41,10 +42,11 @@ function DispositionSection() {
     setSaving(true);
     setError(null);
     try {
-      await createDispositionCode({ label: label.trim(), color, isDefault });
+      await createDispositionCode({ label: label.trim(), color, isDefault, marksSaleClosed });
       setLabel('');
       setColor('#3b82f6');
       setIsDefault(false);
+      setMarksSaleClosed(false);
       setAdding(false);
       load();
     } catch {
@@ -114,6 +116,10 @@ function DispositionSection() {
             <input type="checkbox" checked={isDefault} onChange={(e) => setIsDefault(e.target.checked)} />
             Marcar como opción por defecto
           </label>
+          <label className={styles.checkRow}>
+            <input type="checkbox" checked={marksSaleClosed} onChange={(e) => setMarksSaleClosed(e.target.checked)} />
+            Al seleccionarla, llevar al agente a registrar la venta en el CRM
+          </label>
           <div className={styles.formActions}>
             <button className={styles.btnCancel} onClick={() => setAdding(false)}>Cancelar</button>
             <button className={styles.btnSave} onClick={handleAdd} disabled={saving || !label.trim()}>
@@ -134,6 +140,7 @@ function DispositionSection() {
               <span className={styles.codeDot} style={{ background: code.color }} />
               <span className={styles.codeLabel}>{code.label}</span>
               {code.isDefault && <span className={styles.badge}>Por defecto</span>}
+              {code.marksSaleClosed && <span className={styles.badge}>→ Crea venta</span>}
               <button
                 className={styles.btnDelete}
                 onClick={() => handleDelete(code.id)}

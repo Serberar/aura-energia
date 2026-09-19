@@ -1,7 +1,20 @@
 import { useEffect, useState, useCallback } from 'react';
-import { getAgentCalls } from '../services/supervisorService';
+import { getAgentCalls, getAgentPauseLogs } from '../services/supervisorService';
 import type { AgentCallDetail } from '../services/supervisorService';
+import type { PauseLog, PauseReason } from '../types';
 import styles from './AgentCallsDrawer.module.scss';
+
+const PAUSE_REASON_LABELS: Record<PauseReason, string> = {
+  break: 'Descanso', lunch: 'Almuerzo', admin: 'Gestión administrativa',
+  training: 'Formación', personal: 'Personal',
+};
+
+function fmtPauseDuration(secs: number | null): string {
+  if (secs == null) return 'en curso';
+  const m = Math.floor(secs / 60);
+  const s = secs % 60;
+  return m > 0 ? `${m}m ${s}s` : `${s}s`;
+}
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -17,15 +30,6 @@ function fmtDuration(secs: number | null | undefined) {
   const m = Math.floor(secs / 60);
   const s = secs % 60;
   return m > 0 ? `${m}m ${s}s` : `${s}s`;
-}
-
-function fmtWrapUp(startedAt: string | null, endedAt: string | null) {
-  if (!startedAt || !endedAt) return '—';
-  const secs = Math.round(
-    (new Date(endedAt).getTime() - new Date(startedAt).getTime()) / 1000,
-  );
-  if (secs <= 0) return '—';
-  return fmtDuration(secs);
 }
 
 function isoDate(d: Date) {
@@ -77,6 +81,12 @@ export default function AgentCallsDrawer({ agentId, agentName, onClose }: Props)
   const [error,   setError]   = useState<string | null>(null);
   const [page,    setPage]    = useState(1);
   const [preset,  setPreset]  = useState<Preset>('today');
+  const [pauses,  setPauses]  = useState<PauseLog[]>([]);
+
+  useEffect(() => {
+    if (!agentId) { setPauses([]); return; }
+    getAgentPauseLogs(agentId).then(setPauses).catch(() => setPauses([]));
+  }, [agentId]);
 
   const load = useCallback(async () => {
     if (!agentId) return;
@@ -133,6 +143,22 @@ export default function AgentCallsDrawer({ agentId, agentName, onClose }: Props)
             </button>
           ))}
         </div>
+
+        {/* Pausas de hoy */}
+        {pauses.length > 0 && (
+          <div className={styles.pauseSection}>
+            <span className={styles.pauseSectionTitle}>
+              Pausas de hoy ({fmtDuration(pauses.reduce((acc, p) => acc + (p.duration ?? 0), 0))})
+            </span>
+            <div className={styles.pauseList}>
+              {pauses.map((p) => (
+                <span key={p.id} className={styles.pauseChip}>
+                  {PAUSE_REASON_LABELS[p.reason] ?? p.reason} · {fmtPauseDuration(p.duration)}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Content */}
         <div className={styles.drawerBody}>
@@ -246,7 +272,9 @@ export default function AgentCallsDrawer({ agentId, agentName, onClose }: Props)
                           </td>
                           <td>
                             {call.recordingUrl
-                              ? <audio controls src={call.recordingUrl} style={{ height: 26, width: 120 }} />
+                              ? <audio controls src={call.recordingUrl} style={{ height: 26, width: 120 }} title="Grabación completa" />
+                              : call.agentRecordingUrl
+                              ? <audio controls src={call.agentRecordingUrl} style={{ height: 26, width: 120 }} title="Solo audio del agente" />
                               : '—'}
                           </td>
                         </tr>
